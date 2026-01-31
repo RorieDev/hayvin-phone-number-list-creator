@@ -18,6 +18,7 @@ import LogCallModal from '../components/LogCallModal';
 import LeadInsightPanel from '../components/LeadInsightPanel';
 import LeadScoreBadge from '../components/LeadScoreBadge';
 import { useResizableColumns, ResizableHeader } from '../hooks/useResizableColumns';
+import { scoreLead } from '../lib/leadScoring';
 
 const STATUS_OPTIONS = [
     { value: '', label: 'All Statuses' },
@@ -65,7 +66,16 @@ export default function Leads() {
             if (statusFilter) params.status = statusFilter;
 
             const data = await leadsApi.getAll(params);
-            setLeads(data.leads || []);
+            let fetchedLeads = data.leads || [];
+
+            // Sort by score descending
+            fetchedLeads = fetchedLeads.sort((a, b) => {
+                const scoreA = scoreLead(a).score;
+                const scoreB = scoreLead(b).score;
+                return scoreB - scoreA;
+            });
+
+            setLeads(fetchedLeads);
             setTotal(data.total || 0);
         } catch (error) {
             console.error('Failed to fetch leads:', error);
@@ -87,7 +97,10 @@ export default function Leads() {
 
     useEffect(() => {
         socketService.onLeadUpdated((lead) => {
-            setLeads(prev => prev.map(l => l.id === lead.id ? lead : l));
+            setLeads(prev => {
+                const updated = prev.map(l => l.id === lead.id ? lead : l);
+                return updated.sort((a, b) => scoreLead(b).score - scoreLead(a).score);
+            });
             if (panelLead?.id === lead.id) {
                 setPanelLead(lead);
             }
