@@ -70,16 +70,11 @@ export default function Dashboard() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Dashboard</h1>
-                <div className="flex gap-3">
-                    <Link to="/scraper" className="btn btn-primary">
-                        <Target size={18} />
-                        Scrape Leads
-                    </Link>
-                </div>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-4" style={{ marginBottom: 'var(--space-8)' }}>
+
                 <div className="stat-card">
                     <div className="flex items-center justify-between">
                         <div>
@@ -278,6 +273,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
