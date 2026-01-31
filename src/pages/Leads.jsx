@@ -245,6 +245,13 @@ export default function Leads() {
                                         Number
                                     </ResizableHeader>
                                     <ResizableHeader
+                                        columnId="email"
+                                        width={columnWidths.email}
+                                        onResizeStart={handleResizeStart}
+                                    >
+                                        Email
+                                    </ResizableHeader>
+                                    <ResizableHeader
                                         columnId="score"
                                         width={columnWidths.score}
                                         onResizeStart={handleResizeStart}
@@ -257,13 +264,6 @@ export default function Leads() {
                                         onResizeStart={handleResizeStart}
                                     >
                                         Business
-                                    </ResizableHeader>
-                                    <ResizableHeader
-                                        columnId="email"
-                                        width={columnWidths.email}
-                                        onResizeStart={handleResizeStart}
-                                    >
-                                        Email
                                     </ResizableHeader>
                                     <ResizableHeader
                                         columnId="rating"
@@ -306,6 +306,25 @@ export default function Leads() {
                                                 <span className="text-muted">No phone</span>
                                             )}
                                         </td>
+                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email }}>
+                                            <div className="flex items-center justify-center">
+                                                {lead.email ? (
+                                                    <a
+                                                        href={`mailto:${lead.email}?body=${encodeURIComponent("Hi \n\n\n\n\nCheers Rorie from Hayvin.co.uk")}`}
+                                                        className="btn btn-ghost btn-icon"
+                                                        style={{ color: 'var(--primary-400)' }}
+                                                        title={`Email ${lead.email}`}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <Mail size={18} />
+                                                    </a>
+                                                ) : (
+                                                    <div className="text-muted" title="No email address available" style={{ opacity: 0.2 }}>
+                                                        <Mail size={18} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
                                             <LeadScoreBadge lead={lead} showBand={false} compact />
                                         </td>
@@ -328,25 +347,6 @@ export default function Leads() {
                                                         </a>
                                                     )}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email }}>
-                                            <div className="flex items-center justify-center">
-                                                {lead.email ? (
-                                                    <a
-                                                        href={`mailto:${lead.email}`}
-                                                        className="btn btn-ghost btn-icon"
-                                                        style={{ color: 'var(--primary-400)' }}
-                                                        title={`Email ${lead.email}`}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <Mail size={18} />
-                                                    </a>
-                                                ) : (
-                                                    <div className="text-muted" title="No email address available" style={{ opacity: 0.2 }}>
-                                                        <Mail size={18} />
-                                                    </div>
-                                                )}
                                             </div>
                                         </td>
                                         <td style={{ width: columnWidths.rating, maxWidth: columnWidths.rating }}>
