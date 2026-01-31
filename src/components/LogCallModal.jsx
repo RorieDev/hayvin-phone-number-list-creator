@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Phone,
     X,
@@ -23,6 +23,13 @@ export default function LogCallModal({ lead, onClose }) {
     const [notes, setNotes] = useState('');
     const [scheduledCallback, setScheduledCallback] = useState('');
     const [saving, setSaving] = useState(false);
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.keyCode === 27) onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [onClose]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

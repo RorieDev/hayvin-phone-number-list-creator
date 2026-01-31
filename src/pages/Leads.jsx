@@ -448,7 +448,6 @@ export default function Leads() {
                     <div
                         className="lead-insight-overlay"
                         onClick={() => setPanelLead(null)}
-                        style={{ display: window.innerWidth <= 1200 ? 'block' : 'none' }}
                     />
                     <LeadInsightPanel
                         lead={panelLead}

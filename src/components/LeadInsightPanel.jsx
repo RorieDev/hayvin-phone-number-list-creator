@@ -68,10 +68,15 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
     };
 
     useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.keyCode === 27) onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
         return () => {
+            window.removeEventListener('keydown', handleEsc);
             if (notesTimeoutRef.current) clearTimeout(notesTimeoutRef.current);
         };
-    }, []);
+    }, [onClose]);
 
     if (!lead) return null;
 
