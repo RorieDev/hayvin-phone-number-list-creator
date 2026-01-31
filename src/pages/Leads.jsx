@@ -172,7 +172,7 @@ export default function Leads() {
                 <div className="page-header">
                     <div>
                         <h1 className="page-title">Leads</h1>
-                        <p className="text-muted">{total} total leads • Click a lead to view insights</p>
+                        <p className="text-muted">{total} total leads</p>
                     </div>
                     <button
                         className="btn btn-ghost btn-sm hidden-mobile"
