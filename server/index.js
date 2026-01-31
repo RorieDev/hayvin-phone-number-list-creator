@@ -20,9 +20,18 @@ const app = express();
 const httpServer = createServer(app);
 
 // Socket.IO setup
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'https://hayvin-phone-number-list-creator.onrender.com'
+].filter(Boolean);
+
+// Socket.IO setup
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
@@ -35,7 +44,7 @@ app.set('io', io);
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173'
+  origin: allowedOrigins
 }));
 app.use(express.json());
 
