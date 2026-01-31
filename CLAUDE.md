@@ -68,6 +68,9 @@ npm run build
 
 # Start production server
 npm start
+
+# Trigger Render Deployment (Run after git push)
+curl -X POST "https://api.render.com/deploy/srv-d5v1tmggjchc7390j920?key=ySCnfTKuKpg"
 ```
 
 ## Lead Scoring System
@@ -115,6 +118,13 @@ Catch-all routes must use named parameters with the splat prefix, e.g., `/*splat
 
 - **Column Order**: Optimized for calling: Phone (1st), Score (2nd), Business (3rd).
 - **Persistence**: Column widths are saved to `localStorage`.
+
+## Deployment Protocol
+
+Automatic deployments are currently unreliable on Render for this service. **Always** trigger the deploy hook manually after pushing to the `main` branch:
+
+1. `git push origin main`
+2. `curl -X POST "https://api.render.com/deploy/srv-d5v1tmggjchc7390j920?key=ySCnfTKuKpg"`
 
 ## GitHub Repo
 
