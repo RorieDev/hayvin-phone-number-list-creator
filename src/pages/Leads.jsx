@@ -175,7 +175,7 @@ export default function Leads() {
                         <p className="text-muted">{total} total leads • Click a lead to view insights</p>
                     </div>
                     <button
-                        className="btn btn-ghost btn-sm"
+                        className="btn btn-ghost btn-sm hidden-mobile"
                         onClick={resetWidths}
                         title="Reset column widths"
                     >
