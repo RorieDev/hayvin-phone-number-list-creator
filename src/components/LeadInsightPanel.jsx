@@ -103,45 +103,25 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                 </button>
 
                 {/* Business Snapshot */}
-                <div className="lead-insight-snapshot">
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
-                        <h2 className="lead-insight-business-name" style={{ flex: 1 }}>{lead.business_name}</h2>
-
-                        {/* Lead Score Badge */}
+                <div className="lead-insight-snapshot" style={{ paddingTop: 'var(--space-4)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                        {/* Compact Lead Score */}
                         <div
-                            className="lead-score-panel"
                             style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                padding: 'var(--space-2) var(--space-3)',
-                                background: 'var(--bg-tertiary)',
-                                borderRadius: 'var(--radius-md)',
-                                border: `1px solid ${scoreColor}40`,
-                                minWidth: 65
+                                fontSize: '24px',
+                                fontWeight: 800,
+                                color: scoreColor,
+                                lineHeight: 1,
+                                minWidth: '40px'
                             }}
                             title={leadScore.explanation}
                         >
-                            <div style={{
-                                fontSize: 'var(--font-size-xl)',
-                                fontWeight: 700,
-                                color: scoreColor,
-                                lineHeight: 1
-                            }}>
-                                {leadScore.score}
-                            </div>
-                            <div style={{
-                                fontSize: '9px',
-                                fontWeight: 600,
-                                color: scoreColor,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.05em',
-                                marginTop: 2
-                            }}>
-                                {leadScore.band}
-                            </div>
+                            {leadScore.score}
                         </div>
+
+                        <h2 className="lead-insight-business-name" style={{ flex: 1, margin: 0 }}>{lead.business_name}</h2>
                     </div>
+
 
                     <div className="lead-insight-meta">
                         <span className="lead-insight-location">
