@@ -237,11 +237,11 @@ export default function Leads() {
                             <thead>
                                 <tr>
                                     <ResizableHeader
-                                        columnId="business"
-                                        width={columnWidths.business}
+                                        columnId="phone"
+                                        width={columnWidths.phone}
                                         onResizeStart={handleResizeStart}
                                     >
-                                        Business
+                                        Phone
                                     </ResizableHeader>
                                     <ResizableHeader
                                         columnId="score"
@@ -251,11 +251,11 @@ export default function Leads() {
                                         Score
                                     </ResizableHeader>
                                     <ResizableHeader
-                                        columnId="phone"
-                                        width={columnWidths.phone}
+                                        columnId="business"
+                                        width={columnWidths.business}
                                         onResizeStart={handleResizeStart}
                                     >
-                                        Phone
+                                        Business
                                     </ResizableHeader>
                                     <ResizableHeader
                                         columnId="location"
@@ -288,6 +288,24 @@ export default function Leads() {
                                         className={`clickable-row ${panelLead?.id === lead.id ? 'selected' : ''}`}
                                         onClick={(e) => handleRowClick(lead, e)}
                                     >
+                                        <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>
+                                            {lead.phone_number ? (
+                                                <a
+                                                    href={`tel:${lead.phone_number}`}
+                                                    className="flex items-center gap-2"
+                                                    style={{ color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    <Phone size={14} style={{ color: 'var(--primary-400)', flexShrink: 0 }} />
+                                                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{lead.phone_number}</span>
+                                                </a>
+                                            ) : (
+                                                <span className="text-muted">No phone</span>
+                                            )}
+                                        </td>
+                                        <td style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
+                                            <LeadScoreBadge lead={lead} showBand={false} compact />
+                                        </td>
                                         <td style={{ width: columnWidths.business, maxWidth: columnWidths.business }}>
                                             <div>
                                                 <div className="font-medium" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -306,24 +324,6 @@ export default function Leads() {
                                                     </a>
                                                 )}
                                             </div>
-                                        </td>
-                                        <td style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
-                                            <LeadScoreBadge lead={lead} showBand={false} compact />
-                                        </td>
-                                        <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>
-                                            {lead.phone_number ? (
-                                                <a
-                                                    href={`tel:${lead.phone_number}`}
-                                                    className="flex items-center gap-2"
-                                                    style={{ color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    <Phone size={14} style={{ color: 'var(--primary-400)', flexShrink: 0 }} />
-                                                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{lead.phone_number}</span>
-                                                </a>
-                                            ) : (
-                                                <span className="text-muted">No phone</span>
-                                            )}
                                         </td>
                                         <td style={{ width: columnWidths.location, maxWidth: columnWidths.location }}>
                                             <div className="flex items-center gap-2 text-sm text-muted" style={{ overflow: 'hidden' }}>
@@ -349,6 +349,7 @@ export default function Leads() {
                                                 {lead.status?.replace('_', ' ')}
                                             </span>
                                         </td>
+
                                         <td style={{ width: columnWidths.actions }}>
                                             <div className="flex items-center gap-2">
                                                 <button
