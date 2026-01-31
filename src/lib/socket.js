@@ -1,6 +1,14 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/' : 'http://localhost:3001');
+const getSocketUrl = () => {
+    const envUrl = import.meta.env.VITE_API_URL;
+    if (import.meta.env.PROD) {
+        return (!envUrl || envUrl.includes('localhost')) ? '/' : envUrl;
+    }
+    return envUrl || 'http://localhost:3001';
+};
+
+const SOCKET_URL = getSocketUrl();
 
 class SocketService {
     constructor() {

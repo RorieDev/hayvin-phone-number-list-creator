@@ -43,9 +43,7 @@ initializeSocket(io);
 app.set('io', io);
 
 // Middleware
-app.use(cors({
-  origin: allowedOrigins
-}));
+app.use(cors()); // Allow all origins for simplicity and to avoid CORS issues in production
 app.use(express.json());
 
 // API Routes

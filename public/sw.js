@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hayvin-crm-v1';
+const CACHE_NAME = 'hayvin-crm-v2';
 const OFFLINE_URL = '/offline.html';
 
 // Assets to cache on install

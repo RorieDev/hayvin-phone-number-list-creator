@@ -1,4 +1,13 @@
-const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:3001');
+const getApiUrl = () => {
+    const envUrl = import.meta.env.VITE_API_URL;
+    if (import.meta.env.PROD) {
+        // In production, always use relative path unless specifically told otherwise (and not localhost)
+        return (!envUrl || envUrl.includes('localhost')) ? '' : envUrl;
+    }
+    return envUrl || 'http://localhost:3001';
+};
+
+const API_URL = getApiUrl();
 
 async function request(endpoint, options = {}) {
     const url = `${API_URL}/api${endpoint}`;
