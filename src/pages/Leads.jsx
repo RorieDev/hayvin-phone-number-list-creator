@@ -292,9 +292,14 @@ export default function Leads() {
                                             {lead.phone_number ? (
                                                 <div className="flex items-center gap-2">
                                                     <span className="hidden-mobile" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.phone_number}</span>
-                                                    <span className="mobile-only" style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)' }}>
+                                                    <a
+                                                        href={`tel:${lead.phone_number}`}
+                                                        className="mobile-only"
+                                                        style={{ fontSize: 'var(--font-size-xs)', color: 'var(--primary-400)', textDecoration: 'none' }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
                                                         {lead.phone_number.replace(/\s+/g, '').substring(0, 5)}...
-                                                    </span>
+                                                    </a>
                                                 </div>
                                             ) : (
                                                 <span className="text-muted">No phone</span>
@@ -305,15 +310,6 @@ export default function Leads() {
                                         </td>
                                         <td style={{ width: columnWidths.business, maxWidth: columnWidths.business }}>
                                             <div className="flex items-center gap-2">
-                                                <div className="mobile-only">
-                                                    <a
-                                                        href={`tel:${lead.phone_number}`}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        style={{ display: 'flex', alignItems: 'center' }}
-                                                    >
-                                                        <Phone size={14} style={{ color: 'var(--primary-400)', flexShrink: 0 }} />
-                                                    </a>
-                                                </div>
                                                 <div style={{ overflow: 'hidden' }}>
                                                     <div className="font-medium" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                         {lead.business_name}
