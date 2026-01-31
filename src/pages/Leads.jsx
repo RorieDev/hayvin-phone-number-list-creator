@@ -32,10 +32,10 @@ const STATUS_OPTIONS = [
 
 // Default column widths
 const DEFAULT_COLUMN_WIDTHS = {
-    phone: 100,
+    phone: 120,
+    email: 80,
     score: 80,
     business: 220,
-    email: 60,
     rating: 90,
     status: 110,
     actions: 90
@@ -248,6 +248,7 @@ export default function Leads() {
                                         columnId="email"
                                         width={columnWidths.email}
                                         onResizeStart={handleResizeStart}
+                                        style={{ textAlign: 'center' }}
                                     >
                                         Email
                                     </ResizableHeader>
