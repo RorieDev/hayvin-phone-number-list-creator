@@ -62,7 +62,8 @@ router.post('/scrape', async (req, res) => {
             google_maps_url: place.google_maps_url,
             source_query: query,
             campaign_id: campaignId || null,
-            status: 'new'
+            status: 'new',
+            email: place.email || null
         }));
 
         // Upsert leads (update if place_id exists)

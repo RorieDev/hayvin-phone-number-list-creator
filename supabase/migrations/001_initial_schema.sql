@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS leads (
   source_query TEXT,
   campaign_id UUID REFERENCES campaigns(id) ON DELETE SET NULL,
   status VARCHAR(50) DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'callback', 'qualified', 'not_interested')),
+  email VARCHAR(255),
   notes TEXT,
   last_called_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

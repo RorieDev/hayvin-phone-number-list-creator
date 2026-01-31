@@ -70,6 +70,44 @@ export async function getPlaceDetails(placeId) {
 }
 
 /**
+ * Simple email scraper that looks for mailto: links or email patterns on a website
+ * @param {string} url - Website URL
+ * @returns {Promise<string|null>} - Found email or null
+ */
+export async function findEmailOnWebsite(url) {
+    if (!url) return null;
+
+    try {
+        const response = await axios.get(url, {
+            timeout: 5000,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+
+        const html = response.data;
+        if (typeof html !== 'string') return null;
+
+        // 1. Look for mailto: links
+        const mailtoMatch = html.match(/mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+        if (mailtoMatch && mailtoMatch[1]) {
+            return mailtoMatch[1].toLowerCase();
+        }
+
+        // 2. Look for email patterns in text
+        const emailMatch = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i);
+        if (emailMatch) {
+            return emailMatch[0].toLowerCase();
+        }
+
+        return null;
+    } catch (error) {
+        console.warn(`Could not scrape email from ${url}:`, error.message);
+        return null;
+    }
+}
+
+/**
  * Search and format results
  * @param {string} query - Search query
  * @param {number} maxResults - Maximum number of results to fetch
@@ -95,8 +133,14 @@ export async function searchAndGetDetails(query, maxResults = 20, onProgress = n
                 total_ratings: place.userRatingCount || 0,
                 category: place.types?.[0] || 'unknown',
                 business_status: place.businessStatus || 'UNKNOWN',
-                google_maps_url: place.googleMapsUri || null
+                google_maps_url: place.googleMapsUri || null,
+                email: null
             };
+
+            // Try to find email if website is available
+            if (formattedPlace.website) {
+                formattedPlace.email = await findEmailOnWebsite(formattedPlace.website);
+            }
 
             detailedResults.push(formattedPlace);
 

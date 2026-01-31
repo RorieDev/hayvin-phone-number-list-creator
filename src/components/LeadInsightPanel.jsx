@@ -22,7 +22,8 @@ import {
     Globe,
     Edit3,
     Save,
-    Gauge
+    Gauge,
+    Mail
 } from 'lucide-react';
 import { scoreLead, getScoreColor } from '../lib/leadScoring';
 
@@ -129,10 +130,12 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
 
 
                     <div className="lead-insight-meta">
-                        <span className="lead-insight-location">
-                            <MapPin size={14} />
-                            {extractPostcode(lead.address)} • {extractTown(lead.address)}
-                        </span>
+                        {lead.email && (
+                            <span className="lead-insight-location">
+                                <Mail size={14} />
+                                {lead.email}
+                            </span>
+                        )}
 
                         {lead.rating && (
                             <span className="lead-insight-rating">
@@ -189,6 +192,17 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         >
                             <Globe size={14} />
                             {new URL(lead.website).hostname}
+                        </a>
+                    )}
+
+                    {lead.email && (
+                        <a
+                            href={`mailto:${lead.email}`}
+                            className="lead-insight-website"
+                            style={{ marginTop: 'var(--space-2)' }}
+                        >
+                            <Mail size={14} />
+                            {lead.email}
                         </a>
                     )}
                 </section>
@@ -336,7 +350,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

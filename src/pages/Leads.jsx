@@ -9,6 +9,7 @@ import {
     MoreVertical,
     Trash2,
     PhoneCall,
+    Mail,
     ChevronRight,
     RotateCcw
 } from 'lucide-react';
@@ -34,7 +35,7 @@ const DEFAULT_COLUMN_WIDTHS = {
     phone: 100,
     score: 80,
     business: 220,
-    location: 180,
+    email: 60,
     rating: 90,
     status: 110,
     actions: 90
@@ -258,11 +259,11 @@ export default function Leads() {
                                         Business
                                     </ResizableHeader>
                                     <ResizableHeader
-                                        columnId="location"
-                                        width={columnWidths.location}
+                                        columnId="email"
+                                        width={columnWidths.email}
                                         onResizeStart={handleResizeStart}
                                     >
-                                        Location
+                                        Email
                                     </ResizableHeader>
                                     <ResizableHeader
                                         columnId="rating"
@@ -329,12 +330,23 @@ export default function Leads() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ width: columnWidths.location, maxWidth: columnWidths.location }}>
-                                            <div className="flex items-center gap-2 text-sm text-muted" style={{ overflow: 'hidden' }}>
-                                                <MapPin size={14} style={{ flexShrink: 0 }} />
-                                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                    {lead.address || 'Unknown'}
-                                                </span>
+                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email }}>
+                                            <div className="flex items-center justify-center">
+                                                {lead.email ? (
+                                                    <a
+                                                        href={`mailto:${lead.email}`}
+                                                        className="btn btn-ghost btn-icon"
+                                                        style={{ color: 'var(--primary-400)' }}
+                                                        title={`Email ${lead.email}`}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <Mail size={18} />
+                                                    </a>
+                                                ) : (
+                                                    <div className="text-muted" title="No email address available" style={{ opacity: 0.2 }}>
+                                                        <Mail size={18} />
+                                                    </div>
+                                                )}
                                             </div>
                                         </td>
                                         <td style={{ width: columnWidths.rating, maxWidth: columnWidths.rating }}>
