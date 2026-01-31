@@ -33,7 +33,7 @@ const STATUS_OPTIONS = [
 // Default column widths
 const DEFAULT_COLUMN_WIDTHS = {
     phone: 120,
-    email: 80,
+    email: 90,
     score: 80,
     business: 220,
     rating: 90,
@@ -248,9 +248,10 @@ export default function Leads() {
                                         columnId="email"
                                         width={columnWidths.email}
                                         onResizeStart={handleResizeStart}
-                                        style={{ textAlign: 'center' }}
+                                        className="text-center"
+                                        style={{ paddingLeft: 0, paddingRight: 0 }}
                                     >
-                                        Email
+                                        <div style={{ width: '100%', textAlign: 'center' }}>Email</div>
                                     </ResizableHeader>
                                     <ResizableHeader
                                         columnId="score"
@@ -307,20 +308,20 @@ export default function Leads() {
                                                 <span className="text-muted">No phone</span>
                                             )}
                                         </td>
-                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email }}>
-                                            <div className="flex items-center justify-center">
+                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email, paddingLeft: 0, paddingRight: 0 }}>
+                                            <div className="flex items-center justify-center" style={{ width: '100%' }}>
                                                 {lead.email ? (
                                                     <a
                                                         href={`mailto:${lead.email}?body=${encodeURIComponent("Hi \n\n\n\n\nCheers Rorie from Hayvin.co.uk")}`}
                                                         className="btn btn-ghost btn-icon"
-                                                        style={{ color: 'var(--primary-400)' }}
+                                                        style={{ color: 'var(--primary-400)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                                         title={`Email ${lead.email}`}
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
                                                         <Mail size={18} />
                                                     </a>
                                                 ) : (
-                                                    <div className="text-muted" title="No email address available" style={{ opacity: 0.2 }}>
+                                                    <div className="text-muted" title="No email address available" style={{ opacity: 0.2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                         <Mail size={18} />
                                                     </div>
                                                 )}
