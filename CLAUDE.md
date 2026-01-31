@@ -1,6 +1,6 @@
 # Hayvin Phone Number List Creator
 
-A lightweight CRM for managing outbound calling campaigns with Google Places integration.
+A lightweight, high-performance CRM for managing outbound calling campaigns with Google Places integration. Built for speed and ease of use on both desktop and mobile.
 
 ## Project Structure
 
@@ -28,9 +28,9 @@ A lightweight CRM for managing outbound calling campaigns with Google Places int
 │   ├── hooks/
 │   │   └── useResizableColumns.jsx  # Draggable table column widths
 │   ├── components/
-│   │   ├── Layout.jsx      # Sidebar navigation
+│   │   ├── Layout.jsx      # Global layout with mobile hamburger menu
 │   │   ├── LogCallModal.jsx # Call logging modal
-│   │   ├── LeadInsightPanel.jsx # Right-side lead detail panel
+│   │   ├── LeadInsightPanel.jsx # Right-side lead detail panel (Score on left)
 │   │   └── LeadScoreBadge.jsx   # Score display component
 │   └── pages/
 │       ├── Dashboard.jsx   # Stats overview
@@ -88,11 +88,13 @@ Leads are scored 0-100 to prioritize calling.
 
 ## PWA Support
 
-The app is an installable PWA.
+The app is an installable PWA designed for field sales.
 - **Manifest**: `public/manifest.json`
-- **Service Worker**: `public/sw.js` (Network-first caching)
+- **Service Worker**: `public/sw.js` (Network-first with `v2` cache busting)
+- **Mobile Menu**: Hamburger menu toggle with animated slide-over sidebar.
 - **Mobile Action**: `tel:` links open native dialer on Android/iOS.
-- **Theme**: Teal (#14b8a6) with Dark mode support.
+- **Touch Targets**: Large, finger-friendly buttons for calling and logging.
+- **Theme**: Teal (#14b8a6) with Slate dark mode.
 
 ## Core Dependencies (Render Fix)
 
@@ -102,6 +104,17 @@ Vite and related plugins are in `dependencies` (not `devDependencies`) to ensure
 
 Express 5 uses `path-to-regexp` v8. The traditional `*` wildcard is now literal.
 Catch-all routes must use named parameters with the splat prefix, e.g., `/*splat`.
+
+## Production Networking
+
+- **CORS**: Allows all origins in production for multi-device reliability.
+- **API Paths**: Frontend uses relative paths (`/api`) to ensure compatibility across local and Render environments without URL hardcoding.
+- **Sockets**: Socket.IO connects via the current origin with fallback polling enabled.
+
+## Table Preferences
+
+- **Column Order**: Optimized for calling: Phone (1st), Score (2nd), Business (3rd).
+- **Persistence**: Column widths are saved to `localStorage`.
 
 ## GitHub Repo
 
