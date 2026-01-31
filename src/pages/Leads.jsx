@@ -8,7 +8,7 @@ import {
     MapPin,
     MoreVertical,
     Trash2,
-    PhoneCall,
+    ClipboardList,
     Mail,
     ChevronRight,
     RotateCcw
@@ -375,7 +375,7 @@ export default function Leads() {
                                                     onClick={() => handleLogCall(lead)}
                                                     title="Log Call"
                                                 >
-                                                    <PhoneCall size={16} />
+                                                    <ClipboardList size={16} />
                                                 </button>
                                                 <div style={{ position: 'relative' }}>
                                                     <button

@@ -14,7 +14,7 @@ import {
     MessageSquare,
     Calendar,
     XCircle,
-    PhoneCall,
+    ClipboardList,
     Target,
     Lightbulb,
     TrendingUp,
@@ -331,7 +331,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     className="btn btn-primary btn-lg lead-insight-call-btn"
                     onClick={() => onLogCall?.(lead)}
                 >
-                    <PhoneCall size={18} />
+                    <ClipboardList size={18} />
                     Call Now (Guided)
                 </button>
 
