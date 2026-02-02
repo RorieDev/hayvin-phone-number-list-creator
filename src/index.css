@@ -1073,6 +1073,20 @@ a:hover {
   .hidden-mobile {
     display: none !important;
   }
+
+  /* Tighter table layout for mobile */
+  .table th,
+  .table td {
+    padding: var(--space-2) var(--space-2);
+  }
+
+  .table th:first-child,
+  .table td:first-child {
+    width: auto !important;
+    max-width: 90px !important;
+    min-width: auto !important;
+    padding-right: var(--space-1);
+  }
 }
 
 .mobile-only {
