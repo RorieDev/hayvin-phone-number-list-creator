@@ -101,21 +101,26 @@ router.post('/', async (req, res) => {
                 newStatus = null;
         }
 
-        if (newStatus) {
-            const { data: updatedLead, error: leadError } = await supabase
-                .from('leads')
-                .update({
-                    status: newStatus,
-                    updated_at: new Date().toISOString(),
-                    last_called_at: new Date().toISOString()
-                })
-                .eq('id', lead_id)
-                .select()
-                .single();
+        // Always update last_called_at, regardless of outcome
+        const updateData = {
+            updated_at: new Date().toISOString(),
+            last_called_at: new Date().toISOString()
+        };
 
-            if (!leadError && updatedLead) {
-                emitLeadUpdate(io, 'updated', updatedLead);
-            }
+        // Only update status if there's a status change
+        if (newStatus) {
+            updateData.status = newStatus;
+        }
+
+        const { data: updatedLead, error: leadError } = await supabase
+            .from('leads')
+            .update(updateData)
+            .eq('id', lead_id)
+            .select()
+            .single();
+
+        if (!leadError && updatedLead) {
+            emitLeadUpdate(io, 'updated', updatedLead);
         }
 
         // Emit real-time update
