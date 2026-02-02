@@ -150,7 +150,11 @@ router.get('/stats/overview', async (req, res) => {
             closed: closed || 0,
             dialled: dialled || 0,
             open: open || 0,
-            ...counts
+            ...counts,
+            // Override 'new' and 'contacted' for the dashboard breakdown to match 
+            // the user's "Open" (uncalled) and "Dialled" (total contacted) definitions.
+            new: open || 0,
+            contacted: dialled || 0
         });
     } catch (error) {
         console.error('Get lead stats error:', error);
