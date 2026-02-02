@@ -17,7 +17,15 @@ router.get('/', async (req, res) => {
             .range(offset, offset + limit - 1);
 
         if (status) {
-            query = query.eq('status', status);
+            if (status === 'new') {
+                // 'Open' in UI - leads never called
+                query = query.is('last_called_at', null);
+            } else if (status === 'contacted') {
+                // 'Contacted' in UI - all dialled leads
+                query = query.not('last_called_at', 'is', null);
+            } else {
+                query = query.eq('status', status);
+            }
         }
 
         if (campaign_id) {
