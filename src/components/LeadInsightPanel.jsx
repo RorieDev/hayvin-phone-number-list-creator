@@ -166,6 +166,47 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
             {/* Scrollable Content */}
             <div className="lead-insight-content">
 
+                {/* Call History */}
+                {lead.call_logs && lead.call_logs.length > 0 && (
+                    <section className="lead-insight-section">
+                        <h3 className="lead-insight-section-title">
+                            <Phone size={16} />
+                            Call History
+                        </h3>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                            {lead.call_logs.map((log, i) => (
+                                <div key={i} style={{
+                                    padding: 'var(--space-3)',
+                                    background: 'var(--bg-tertiary)',
+                                    borderRadius: 'var(--radius-md)',
+                                    borderLeft: '3px solid var(--primary-400)'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
+                                        <span style={{ fontWeight: 600, color: 'var(--primary-400)' }}>
+                                            {formatOutcome(log.call_outcome)}
+                                        </span>
+                                        <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
+                                            {log.called_at ? (
+                                                <>
+                                                    {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </>
+                                            ) : (
+                                                'Date unavailable'
+                                            )}
+                                        </span>
+                                    </div>
+                                    {log.notes && (
+                                        <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', lineHeight: 1.5 }}>
+                                            {log.notes}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
                 {/* Contact Intelligence */}
                 <section className="lead-insight-section">
                     <h3 className="lead-insight-section-title">
@@ -281,47 +322,6 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         rows={4}
                     />
                 </section>
-
-                {/* Call History */}
-                {lead.call_logs && lead.call_logs.length > 0 && (
-                    <section className="lead-insight-section">
-                        <h3 className="lead-insight-section-title">
-                            <Phone size={16} />
-                            Call History
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                            {lead.call_logs.map((log, i) => (
-                                <div key={i} style={{
-                                    padding: 'var(--space-3)',
-                                    background: 'var(--bg-tertiary)',
-                                    borderRadius: 'var(--radius-md)',
-                                    borderLeft: '3px solid var(--primary-400)'
-                                }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
-                                        <span style={{ fontWeight: 600, color: 'var(--primary-400)' }}>
-                                            {formatOutcome(log.call_outcome)}
-                                        </span>
-                                        <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
-                                            {log.called_at ? (
-                                                <>
-                                                    {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </>
-                                            ) : (
-                                                'Date unavailable'
-                                            )}
-                                        </span>
-                                    </div>
-                                    {log.notes && (
-                                        <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', lineHeight: 1.5 }}>
-                                            {log.notes}
-                                        </p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
             </div>
 
             {/* Sticky Footer Actions */}

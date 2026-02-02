@@ -300,6 +300,9 @@ export default function Leads() {
                                         <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>
                                             {lead.phone_number ? (
                                                 <div className="flex items-center gap-2">
+                                                    {lead.status === 'not_interested' && (
+                                                        <span title="Not interested">🛑</span>
+                                                    )}
                                                     {lead.call_logs && lead.call_logs.length > 0 && (
                                                         <span title="Interaction logged">🚧</span>
                                                     )}
