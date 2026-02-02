@@ -136,7 +136,7 @@ router.get('/stats/overview', async (req, res) => {
         const { count: closed } = await closedQuery;
 
         // 5. Get counts for all specific statuses
-        const statuses = ['new', 'contacted', 'callback', 'qualified', 'not_interested'];
+        const statuses = ['new', 'contacted', 'callback', 'not_interested'];
         const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);

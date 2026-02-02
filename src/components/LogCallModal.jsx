@@ -11,8 +11,7 @@ const CALL_OUTCOMES = [
     { value: 'voicemail', label: 'Left Voicemail', color: 'var(--warning-500)' },
     { value: 'no_answer', label: 'No Answer', color: 'var(--text-muted)' },
     { value: 'busy', label: 'Busy', color: 'var(--warning-500)' },
-    { value: 'callback_scheduled', label: 'Callback Scheduled', color: '#a855f7' },
-    { value: 'qualified', label: 'Qualified Lead', color: 'var(--success-500)' },
+    { value: 'callback_scheduled', label: 'Demo booked', color: '#a855f7' },
     { value: 'not_interested', label: 'Not Interested', color: 'var(--error-500)' },
     { value: 'wrong_number', label: 'Wrong Number', color: 'var(--error-500)' },
     { value: 'do_not_call', label: 'Do Not Call', color: 'var(--error-500)' },
@@ -134,7 +133,7 @@ export default function LogCallModal({ lead, onClose }) {
                             <div className="form-group">
                                 <label className="form-label">
                                     <Clock size={14} style={{ display: 'inline', marginRight: 'var(--space-1)' }} />
-                                    Schedule Callback
+                                    Schedule Demo
                                 </label>
                                 <input
                                     type="datetime-local"

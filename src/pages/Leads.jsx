@@ -22,10 +22,9 @@ import { scoreLead } from '../lib/leadScoring';
 
 const STATUS_OPTIONS = [
     { value: '', label: 'All Statuses' },
-    { value: 'new', label: 'New' },
+    { value: 'new', label: 'Open' },
     { value: 'contacted', label: 'Contacted' },
-    { value: 'callback', label: 'Callback' },
-    { value: 'qualified', label: 'Qualified' },
+    { value: 'callback', label: 'Demo booked' },
     { value: 'not_interested', label: 'Not Interested' },
 ];
 
@@ -492,8 +491,7 @@ function formatCallOutcome(outcome) {
         'voicemail': 'Voicemail',
         'no_answer': 'No Answer',
         'busy': 'Busy',
-        'callback_scheduled': 'Callback',
-        'qualified': 'Qualified',
+        'callback_scheduled': 'Demo booked',
         'not_interested': 'Not Interested',
         'wrong_number': 'Wrong Number',
         'do_not_call': 'Do Not Call'
@@ -510,8 +508,7 @@ function getOutcomeIcon(outcome) {
         'voicemail': '📟',
         'no_answer': '📵',
         'busy': '🚦',
-        'callback_scheduled': '🗓️',
-        'qualified': '⭐',
+        'callback_scheduled': '📅',
         'not_interested': '🛑',
         'wrong_number': '📵',
         'do_not_call': '🚫'

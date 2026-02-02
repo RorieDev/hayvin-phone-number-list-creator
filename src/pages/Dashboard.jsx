@@ -73,7 +73,7 @@ export default function Dashboard() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-4" style={{ marginBottom: 'var(--space-8)' }}>
+            <div className="grid grid-cols-3" style={{ marginBottom: 'var(--space-8)' }}>
 
                 <div className="stat-card">
                     <div className="flex items-center justify-between">
@@ -108,24 +108,10 @@ export default function Dashboard() {
                 <div className="stat-card">
                     <div className="flex items-center justify-between">
                         <div>
-                            <div className="stat-value" style={{ color: 'var(--success-500)' }}>
-                                {leadStats?.qualified || 0}
-                            </div>
-                            <div className="stat-label">Qualified Leads</div>
-                        </div>
-                        <div className="stat-icon" style={{ background: 'rgba(34, 197, 94, 0.1)', color: 'var(--success-500)' }}>
-                            <CheckCircle size={24} />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="stat-card">
-                    <div className="flex items-center justify-between">
-                        <div>
                             <div className="stat-value" style={{ color: 'var(--warning-500)' }}>
                                 {leadStats?.callback || 0}
                             </div>
-                            <div className="stat-label">Pending Callbacks</div>
+                            <div className="stat-label">Demos booked</div>
                         </div>
                         <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning-500)' }}>
                             <Clock size={24} />
@@ -167,14 +153,14 @@ export default function Dashboard() {
                                             width: 32,
                                             height: 32,
                                             borderRadius: 'var(--radius-full)',
-                                            background: call.call_outcome === 'qualified' ? 'rgba(34, 197, 94, 0.2)' :
+                                            background: call.call_outcome === 'callback_scheduled' ? 'rgba(245, 158, 11, 0.2)' :
                                                 call.call_outcome === 'answered' ? 'rgba(20, 184, 166, 0.2)' :
                                                     'rgba(100, 116, 139, 0.2)',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center'
                                         }}>
-                                            {call.call_outcome === 'qualified' ? <CheckCircle size={16} style={{ color: 'var(--success-500)' }} /> :
+                                            {call.call_outcome === 'callback_scheduled' ? <Clock size={16} style={{ color: 'var(--warning-500)' }} /> :
                                                 call.call_outcome === 'not_interested' ? <XCircle size={16} style={{ color: 'var(--error-500)' }} /> :
                                                     <Phone size={16} style={{ color: 'var(--text-muted)' }} />}
                                         </div>
@@ -203,10 +189,9 @@ export default function Dashboard() {
 
                     <div className="flex flex-col gap-4">
                         {[
-                            { status: 'new', label: 'New', color: 'var(--info-500)', icon: AlertCircle },
+                            { status: 'new', label: 'Open', color: 'var(--info-500)', icon: AlertCircle },
                             { status: 'contacted', label: 'Contacted', color: 'var(--warning-500)', icon: Phone },
-                            { status: 'callback', label: 'Callback', color: '#a855f7', icon: Clock },
-                            { status: 'qualified', label: 'Qualified', color: 'var(--success-500)', icon: CheckCircle },
+                            { status: 'callback', label: 'Demo booked', color: '#a855f7', icon: Clock },
                             { status: 'not_interested', label: 'Not Interested', color: 'var(--error-500)', icon: XCircle },
                         ].map(({ status, label, color, icon: Icon }) => {
                             const count = leadStats?.[status] || 0;

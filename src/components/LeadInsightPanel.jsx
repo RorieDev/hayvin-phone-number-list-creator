@@ -339,10 +339,10 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => createCallbackEvent(lead)}
-                        title="Schedule 30-minute callback"
+                        title="Schedule 30-minute follow up"
                     >
                         <Clock size={14} />
-                        Set Callback
+                        Follow up
                     </button>
                     <button
                         className="btn btn-ghost btn-sm lead-insight-not-interested"
@@ -637,8 +637,7 @@ function formatOutcome(outcome) {
         'voicemail': '📞 Left Voicemail',
         'no_answer': '❌ No Answer',
         'busy': '⏱️ Busy',
-        'callback_scheduled': '📅 Callback Scheduled',
-        'qualified': '⭐ Qualified',
+        'callback_scheduled': '📅 Demo booked',
         'not_interested': '🚫 Not Interested',
         'wrong_number': '❌ Wrong Number',
         'do_not_call': '🚫 Do Not Call'
