@@ -125,24 +125,24 @@ router.get('/stats/overview', async (req, res) => {
         if (campaign_id) dialledQuery = dialledQuery.eq('campaign_id', campaign_id);
         const { count: dialled } = await dialledQuery;
 
-        // 3. Get open (dialled AND status != 'not_interested')
-        let openQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).not('last_called_at', 'is', null).neq('status', 'not_interested');
+        // 3. Get open (NOT dialled)
+        let openQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).is('last_called_at', null);
         if (campaign_id) openQuery = openQuery.eq('campaign_id', campaign_id);
         const { count: open } = await openQuery;
 
-        // 4. Get closed (dialled AND status = 'not_interested')
-        let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).not('last_called_at', 'is', null).eq('status', 'not_interested');
+        // 4. Get closed (status = 'not_interested')
+        let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'not_interested');
         if (campaign_id) closedQuery = closedQuery.eq('campaign_id', campaign_id);
         const { count: closed } = await closedQuery;
 
-        // 5. Counts by other specific statuses if needed (keeping compatibility)
-        const statuses = ['new', 'contacted', 'callback', 'qualified'];
-        const statusCounts = {};
+        // 5. Get counts for all specific statuses
+        const statuses = ['new', 'contacted', 'callback', 'qualified', 'not_interested'];
+        const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);
             if (campaign_id) sQuery = sQuery.eq('campaign_id', campaign_id);
             const { count } = await sQuery;
-            statusCounts[status] = count || 0;
+            counts[status] = count || 0;
         }
 
         res.json({
@@ -150,7 +150,7 @@ router.get('/stats/overview', async (req, res) => {
             closed: closed || 0,
             dialled: dialled || 0,
             open: open || 0,
-            statusCounts
+            ...counts
         });
     } catch (error) {
         console.error('Get lead stats error:', error);
