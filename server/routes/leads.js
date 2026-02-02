@@ -17,8 +17,11 @@ router.get('/', async (req, res) => {
             .range(offset, offset + limit - 1);
 
         if (status) {
-            if (status === 'new') {
-                // 'Open' in UI - leads never called
+            if (status === 'open_pipeline') {
+                // 'Open' in UI - all active leads NOT (Not Interested, Need Closing, Closed Won)
+                query = query.not('status', 'in', '("not_interested","need_closing","closed_won","wrong_number","do_not_call")');
+            } else if (status === 'new') {
+                // 'Fresh' in UI - leads never called
                 query = query.is('last_called_at', null);
             } else if (status === 'contacted') {
                 // 'Contacted' in UI - all dialled leads
@@ -133,18 +136,17 @@ router.get('/stats/overview', async (req, res) => {
         if (campaign_id) dialledQuery = dialledQuery.eq('campaign_id', campaign_id);
         const { count: dialled } = await dialledQuery;
 
-        // 3. Get open (NOT dialled)
-        let openQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).is('last_called_at', null);
-        if (campaign_id) openQuery = openQuery.eq('campaign_id', campaign_id);
-        const { count: open } = await openQuery;
-
-        // 4. Get closed (status = 'not_interested')
-        let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'not_interested');
+        // 3. Get total Closed (Not Interested + Need Closing + Closed Won)
+        let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true })
+            .in('status', ['not_interested', 'need_closing', 'closed_won', 'wrong_number', 'do_not_call']);
         if (campaign_id) closedQuery = closedQuery.eq('campaign_id', campaign_id);
         const { count: closed } = await closedQuery;
 
+        // 4. Get Open (Total - Closed)
+        const open = (total || 0) - (closed || 0);
+
         // 5. Get counts for all specific statuses
-        const statuses = ['new', 'contacted', 'callback', 'not_interested'];
+        const statuses = ['new', 'contacted', 'callback', 'need_closing', 'closed_won', 'not_interested'];
         const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);
@@ -159,8 +161,7 @@ router.get('/stats/overview', async (req, res) => {
             dialled: dialled || 0,
             open: open || 0,
             ...counts,
-            // Override 'new' and 'contacted' for the dashboard breakdown to match 
-            // the user's "Open" (uncalled) and "Dialled" (total contacted) definitions.
+            // Override 'new' to be the Open Pipeline count for the dashboard breakdown
             new: open || 0,
             contacted: dialled || 0
         });

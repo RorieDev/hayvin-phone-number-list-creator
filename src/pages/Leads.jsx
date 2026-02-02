@@ -22,9 +22,12 @@ import { scoreLead } from '../lib/leadScoring';
 
 const STATUS_OPTIONS = [
     { value: '', label: 'All Statuses' },
-    { value: 'new', label: 'Open' },
+    { value: 'open_pipeline', label: 'Open' },
+    { value: 'new', label: 'Fresh (Uncalled)' },
     { value: 'contacted', label: 'Contacted' },
     { value: 'callback', label: 'Demo booked' },
+    { value: 'need_closing', label: 'Need Closing' },
+    { value: 'closed_won', label: 'Closed Won' },
     { value: 'not_interested', label: 'Not Interested' },
 ];
 
@@ -492,6 +495,8 @@ function formatCallOutcome(outcome) {
         'no_answer': 'No Answer',
         'busy': 'Busy',
         'callback_scheduled': 'Demo booked',
+        'need_closing': 'Need Closing',
+        'closed_won': 'Closed Won',
         'not_interested': 'Not Interested',
         'wrong_number': 'Wrong Number',
         'do_not_call': 'Do Not Call'
@@ -509,6 +514,8 @@ function getOutcomeIcon(outcome) {
         'no_answer': '📵',
         'busy': '🚦',
         'callback_scheduled': '📅',
+        'need_closing': '💰',
+        'closed_won': '🏆',
         'not_interested': '🛑',
         'wrong_number': '📵',
         'do_not_call': '🚫'

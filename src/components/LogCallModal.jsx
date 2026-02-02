@@ -12,6 +12,8 @@ const CALL_OUTCOMES = [
     { value: 'no_answer', label: 'No Answer', color: 'var(--text-muted)' },
     { value: 'busy', label: 'Busy', color: 'var(--warning-500)' },
     { value: 'callback_scheduled', label: 'Demo booked', color: '#a855f7' },
+    { value: 'need_closing', label: 'Need Closing', color: 'var(--success-500)' },
+    { value: 'closed_won', label: 'Closed Won', color: 'var(--success-600)' },
     { value: 'not_interested', label: 'Not Interested', color: 'var(--error-500)' },
     { value: 'wrong_number', label: 'Wrong Number', color: 'var(--error-500)' },
     { value: 'do_not_call', label: 'Do Not Call', color: 'var(--error-500)' },
