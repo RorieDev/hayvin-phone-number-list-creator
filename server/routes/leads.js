@@ -70,7 +70,7 @@ router.put('/:id', async (req, res) => {
             .from('leads')
             .update({ ...updates, updated_at: new Date().toISOString() })
             .eq('id', id)
-            .select()
+            .select('*, call_logs(id)')
             .single();
 
         if (error) throw error;

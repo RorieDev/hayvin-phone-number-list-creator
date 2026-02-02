@@ -51,7 +51,11 @@ class SocketService {
     }
 
     subscribe(room) {
-        if (!this.socket) return;
+        if (!this.socket || !this.socket.connected) {
+            // If socket isn't ready, try again in a moment
+            setTimeout(() => this.subscribe(room), 500);
+            return;
+        }
         this.socket.emit(`subscribe:${room}`);
     }
 
