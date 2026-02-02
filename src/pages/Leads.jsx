@@ -155,7 +155,13 @@ export default function Leads() {
         if (e.target.closest('button') || e.target.closest('a')) {
             return;
         }
-        setPanelLead(lead);
+        // Fetch full lead data with call logs
+        leadsApi.getById(lead.id).then(fullLead => {
+            setPanelLead(fullLead);
+        }).catch(error => {
+            console.error('Failed to fetch full lead:', error);
+            setPanelLead(lead);
+        });
     };
 
     const handleLeadUpdate = async (leadId, updates) => {

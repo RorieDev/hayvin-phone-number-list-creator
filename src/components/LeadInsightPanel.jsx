@@ -303,7 +303,13 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                                             {formatOutcome(log.call_outcome)}
                                         </span>
                                         <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
-                                            {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {log.called_at ? (
+                                                <>
+                                                    {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </>
+                                            ) : (
+                                                'Date unavailable'
+                                            )}
                                         </span>
                                     </div>
                                     {log.notes && (
