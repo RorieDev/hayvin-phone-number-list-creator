@@ -18,8 +18,8 @@ router.get('/', async (req, res) => {
 
         if (status) {
             if (status === 'open_pipeline') {
-                // 'Open' in UI - all active leads NOT (Not Interested, Need Closing, Closed Won)
-                query = query.not('status', 'in', '("not_interested","need_closing","closed_won","wrong_number","do_not_call")');
+                // 'Open' in UI - all active leads NOT (Not Interested, Need Closing, Closed Won, Closed Lost)
+                query = query.not('status', 'in', '("not_interested","need_closing","closed_won","closed_lost","wrong_number","do_not_call")');
             } else if (status === 'new') {
                 // 'Fresh' in UI - leads never called
                 query = query.is('last_called_at', null);
@@ -136,9 +136,9 @@ router.get('/stats/overview', async (req, res) => {
         if (campaign_id) dialledQuery = dialledQuery.eq('campaign_id', campaign_id);
         const { count: dialled } = await dialledQuery;
 
-        // 3. Get total Closed (Not Interested + Need Closing + Closed Won)
+        // 3. Get total Closed (Not Interested + Need Closing + Closed Won + Closed Lost)
         let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true })
-            .in('status', ['not_interested', 'need_closing', 'closed_won', 'wrong_number', 'do_not_call']);
+            .in('status', ['not_interested', 'need_closing', 'closed_won', 'closed_lost', 'wrong_number', 'do_not_call']);
         if (campaign_id) closedQuery = closedQuery.eq('campaign_id', campaign_id);
         const { count: closed } = await closedQuery;
 
@@ -146,7 +146,7 @@ router.get('/stats/overview', async (req, res) => {
         const open = (total || 0) - (closed || 0);
 
         // 5. Get counts for all specific statuses
-        const statuses = ['new', 'contacted', 'callback', 'need_closing', 'closed_won', 'not_interested'];
+        const statuses = ['new', 'contacted', 'callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested'];
         const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);

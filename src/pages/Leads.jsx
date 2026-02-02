@@ -28,6 +28,7 @@ const STATUS_OPTIONS = [
     { value: 'callback', label: 'Demo booked' },
     { value: 'need_closing', label: 'Need Closing' },
     { value: 'closed_won', label: 'Closed Won' },
+    { value: 'closed_lost', label: 'Closed Lost' },
     { value: 'not_interested', label: 'Not Interested' },
 ];
 
@@ -497,6 +498,7 @@ function formatCallOutcome(outcome) {
         'callback_scheduled': 'Demo booked',
         'need_closing': 'Need Closing',
         'closed_won': 'Closed Won',
+        'closed_lost': 'Closed Lost',
         'not_interested': 'Not Interested',
         'wrong_number': 'Wrong Number',
         'do_not_call': 'Do Not Call'
@@ -516,6 +518,7 @@ function getOutcomeIcon(outcome) {
         'callback_scheduled': '📅',
         'need_closing': '💰',
         'closed_won': '🏆',
+        'closed_lost': '💔',
         'not_interested': '🛑',
         'wrong_number': '📵',
         'do_not_call': '🚫'

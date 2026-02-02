@@ -194,6 +194,7 @@ export default function Dashboard() {
                             { status: 'callback', label: 'Demo booked', color: '#a855f7', icon: Clock },
                             { status: 'need_closing', label: 'Need Closing', color: 'var(--success-500)', icon: Target },
                             { status: 'closed_won', label: 'Closed Won', color: 'var(--success-600)', icon: CheckCircle },
+                            { status: 'closed_lost', label: 'Closed Lost', color: 'var(--error-500)', icon: XCircle },
                             { status: 'not_interested', label: 'Not Interested', color: 'var(--error-500)', icon: XCircle },
                         ].map(({ status, label, color, icon: Icon }) => {
                             const count = leadStats?.[status] || 0;
