@@ -26,6 +26,7 @@ import {
     Mail
 } from 'lucide-react';
 import { scoreLead, getScoreColor } from '../lib/leadScoring';
+import { createDemoEvent, createCallbackEvent } from '../lib/calendarService';
 
 /**
  * LeadInsightPanel - Right-hand panel showing detailed lead intelligence
@@ -336,11 +337,19 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                 </button>
 
                 <div className="lead-insight-secondary-actions">
-                    <button className="btn btn-secondary btn-sm">
+                    <button 
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => createDemoEvent(lead)}
+                        title="Add 30-minute demo to calendar"
+                    >
                         <Calendar size={14} />
                         Book Demo
                     </button>
-                    <button className="btn btn-secondary btn-sm">
+                    <button 
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => createCallbackEvent(lead)}
+                        title="Schedule 30-minute callback"
+                    >
                         <Clock size={14} />
                         Set Callback
                     </button>
