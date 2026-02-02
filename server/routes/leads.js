@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
         if (status) {
             if (status === 'open_pipeline') {
-                // 'Open' in UI - all active leads NOT (Not Interested, Need Closing, Closed Won, Closed Lost)
+                // 'Open' in UI - all active leads NOT (Not Interested, Needs Closing, Closed Won, Closed Lost)
                 query = query.not('status', 'in', '("not_interested","need_closing","closed_won","closed_lost","wrong_number","do_not_call")');
             } else if (status === 'new') {
                 // 'Fresh' in UI - leads never called
@@ -136,7 +136,7 @@ router.get('/stats/overview', async (req, res) => {
         if (campaign_id) dialledQuery = dialledQuery.eq('campaign_id', campaign_id);
         const { count: dialled } = await dialledQuery;
 
-        // 3. Get total Closed (Not Interested + Need Closing + Closed Won + Closed Lost)
+        // 3. Get total Closed (Not Interested + Needs Closing + Closed Won + Closed Lost)
         let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true })
             .in('status', ['not_interested', 'need_closing', 'closed_won', 'closed_lost', 'wrong_number', 'do_not_call']);
         if (campaign_id) closedQuery = closedQuery.eq('campaign_id', campaign_id);

@@ -638,6 +638,9 @@ function formatOutcome(outcome) {
         'no_answer': '❌ No Answer',
         'busy': '⏱️ Busy',
         'callback_scheduled': '📅 Demo booked',
+        'need_closing': '💰 Needs Closing',
+        'closed_won': '🏆 Closed Won',
+        'closed_lost': '💔 Closed Lost',
         'not_interested': '🚫 Not Interested',
         'wrong_number': '❌ Wrong Number',
         'do_not_call': '🚫 Do Not Call'
