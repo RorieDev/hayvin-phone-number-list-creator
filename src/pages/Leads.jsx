@@ -288,7 +288,7 @@ export default function Leads() {
                                 {leads.map((lead) => (
                                     <tr
                                         key={lead.id}
-                                        className={`clickable-row ${panelLead?.id === lead.id ? 'selected' : ''}`}
+                                        className={`clickable-row ${panelLead?.id === lead.id ? 'selected' : ''} ${lead.status === 'not_interested' ? 'greyed-out' : ''}`}
                                         onClick={(e) => handleRowClick(lead, e)}
                                     >
                                         <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>

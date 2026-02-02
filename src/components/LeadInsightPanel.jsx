@@ -225,49 +225,6 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     </ul>
                 </section>
 
-                {/* AI Call Strategy */}
-                <section className="lead-insight-section">
-                    <h3 className="lead-insight-section-title">
-                        <Sparkles size={16} />
-                        AI Call Strategy
-                    </h3>
-
-                    <div className="lead-insight-strategy">
-                        <div className="lead-insight-opening">
-                            <span className="lead-insight-label">Recommended Opening</span>
-                            <blockquote className="lead-insight-quote">
-                                "{callStrategy.openingLine}"
-                            </blockquote>
-                        </div>
-
-                        <div className="lead-insight-strategy-grid">
-                            <div>
-                                <span className="lead-insight-label">
-                                    <Lightbulb size={12} />
-                                    Likely Pain Points
-                                </span>
-                                <ul className="lead-insight-bullets lead-insight-bullets--pain">
-                                    {callStrategy.painPoints.map((point, i) => (
-                                        <li key={i}>{point}</li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div>
-                                <span className="lead-insight-label">
-                                    <AlertCircle size={12} />
-                                    Likely Objections
-                                </span>
-                                <ul className="lead-insight-bullets lead-insight-bullets--objection">
-                                    {callStrategy.objections.map((obj, i) => (
-                                        <li key={i}>{obj}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 {/* Best Time to Call */}
                 <section className="lead-insight-section">
                     <h3 className="lead-insight-section-title">
@@ -353,7 +310,11 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         <Clock size={14} />
                         Set Callback
                     </button>
-                    <button className="btn btn-ghost btn-sm lead-insight-not-interested">
+                    <button 
+                        className="btn btn-ghost btn-sm lead-insight-not-interested"
+                        onClick={() => onUpdate?.(lead.id, { status: 'not_interested' })}
+                        title="Mark as not interested"
+                    >
                         <XCircle size={14} />
                         Not Interested
                     </button>

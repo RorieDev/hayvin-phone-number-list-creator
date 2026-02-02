@@ -1652,3 +1652,12 @@ a:hover {
   background: rgba(20, 184, 166, 0.08);
   border-left: 3px solid var(--primary-500);
 }
+
+.table tbody tr.clickable-row.greyed-out {
+  opacity: 0.5;
+  color: var(--text-muted);
+}
+
+.table tbody tr.clickable-row.greyed-out:hover {
+  background: transparent;
+}
