@@ -281,18 +281,45 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         rows={4}
                     />
                 </section>
+
+                {/* Call History */}
+                {lead.call_logs && lead.call_logs.length > 0 && (
+                    <section className="lead-insight-section">
+                        <h3 className="lead-insight-section-title">
+                            <Phone size={16} />
+                            Call History
+                        </h3>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                            {lead.call_logs.map((log, i) => (
+                                <div key={i} style={{
+                                    padding: 'var(--space-3)',
+                                    background: 'var(--bg-tertiary)',
+                                    borderRadius: 'var(--radius-md)',
+                                    borderLeft: '3px solid var(--primary-400)'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
+                                        <span style={{ fontWeight: 600, color: 'var(--primary-400)' }}>
+                                            {formatOutcome(log.call_outcome)}
+                                        </span>
+                                        <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
+                                            {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    {log.notes && (
+                                        <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', lineHeight: 1.5 }}>
+                                            {log.notes}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
             </div>
 
             {/* Sticky Footer Actions */}
             <div className="lead-insight-footer">
-                <button
-                    className="btn btn-primary btn-lg lead-insight-call-btn"
-                    onClick={() => onLogCall?.(lead)}
-                >
-                    <ClipboardList size={18} />
-                    Call Now (Guided)
-                </button>
-
                 <div className="lead-insight-secondary-actions">
                     <button 
                         className="btn btn-secondary btn-sm"
@@ -320,7 +347,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     </button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
@@ -579,4 +606,22 @@ function formatCategory(category) {
     return category
         .replace(/_/g, ' ')
         .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/**
+ * Format call outcome for display
+ */
+function formatOutcome(outcome) {
+    const outcomeMap = {
+        'answered': '✅ Answered',
+        'voicemail': '📞 Left Voicemail',
+        'no_answer': '❌ No Answer',
+        'busy': '⏱️ Busy',
+        'callback_scheduled': '📅 Callback Scheduled',
+        'qualified': '⭐ Qualified',
+        'not_interested': '🚫 Not Interested',
+        'wrong_number': '❌ Wrong Number',
+        'do_not_call': '🚫 Do Not Call'
+    };
+    return outcomeMap[outcome] || outcome?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
