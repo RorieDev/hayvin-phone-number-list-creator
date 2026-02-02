@@ -384,7 +384,7 @@ export default function Leads() {
                                         <td style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
                                             {lead.call_logs && lead.call_logs.length > 0 ? (
                                                 <span className="badge badge-neutral">
-                                                    {formatCallOutcome(lead.call_logs[0].call_outcome)}
+                                                    {formatCallOutcome(getLatestCallOutcome(lead.call_logs))}
                                                 </span>
                                             ) : (
                                                 <span className={`badge badge-${lead.status}`}>
@@ -524,6 +524,22 @@ export default function Leads() {
             )}
         </div>
     );
+}
+
+/**
+ * Get the latest call outcome from call logs array
+ */
+function getLatestCallOutcome(callLogs) {
+    if (!callLogs || callLogs.length === 0) return null;
+    
+    // Sort by called_at date (most recent first) and return the outcome
+    const sorted = [...callLogs].sort((a, b) => {
+        const dateA = new Date(a.called_at).getTime();
+        const dateB = new Date(b.called_at).getTime();
+        return dateB - dateA;
+    });
+    
+    return sorted[0]?.call_outcome;
 }
 
 /**
