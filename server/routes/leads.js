@@ -115,43 +115,38 @@ router.get('/stats/overview', async (req, res) => {
     try {
         const { campaign_id } = req.query;
 
-        let query = supabase.from('leads').select('status', { count: 'exact' });
-
-        if (campaign_id) {
-            query = query.eq('campaign_id', campaign_id);
-        }
-
-        // Get counts by status
-        const statuses = ['new', 'contacted', 'callback', 'qualified', 'not_interested'];
-        const stats = {};
-
-        for (const status of statuses) {
-            let statusQuery = supabase
-                .from('leads')
-                .select('*', { count: 'exact', head: true })
-                .eq('status', status);
-
-            if (campaign_id) {
-                statusQuery = statusQuery.eq('campaign_id', campaign_id);
-            }
-
-            const { count } = await statusQuery;
-            stats[status] = count || 0;
-        }
-
-        // Get total
-        let totalQuery = supabase
-            .from('leads')
-            .select('*', { count: 'exact', head: true });
-
-        if (campaign_id) {
-            totalQuery = totalQuery.eq('campaign_id', campaign_id);
-        }
-
+        // 1. Get total
+        let totalQuery = supabase.from('leads').select('*', { count: 'exact', head: true });
+        if (campaign_id) totalQuery = totalQuery.eq('campaign_id', campaign_id);
         const { count: total } = await totalQuery;
-        stats.total = total || 0;
 
-        res.json(stats);
+        // 2. Get closed (not_interested)
+        let closedQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'not_interested');
+        if (campaign_id) closedQuery = closedQuery.eq('campaign_id', campaign_id);
+        const { count: closed } = await closedQuery;
+
+        // 3. Get dialled (last_called_at is not null)
+        let dialledQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).not('last_called_at', 'is', null);
+        if (campaign_id) dialledQuery = dialledQuery.eq('campaign_id', campaign_id);
+        const { count: dialled } = await dialledQuery;
+
+        // 4. Counts by other specific statuses if needed (keeping compatibility)
+        const statuses = ['new', 'contacted', 'callback', 'qualified'];
+        const statusCounts = {};
+        for (const status of statuses) {
+            let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);
+            if (campaign_id) sQuery = sQuery.eq('campaign_id', campaign_id);
+            const { count } = await sQuery;
+            statusCounts[status] = count || 0;
+        }
+
+        res.json({
+            total: total || 0,
+            closed: closed || 0,
+            dialled: dialled || 0,
+            open: (total || 0) - (dialled || 0),
+            statusCounts
+        });
     } catch (error) {
         console.error('Get lead stats error:', error);
         res.status(500).json({ error: error.message });

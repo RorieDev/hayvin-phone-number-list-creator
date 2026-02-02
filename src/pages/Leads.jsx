@@ -49,6 +49,7 @@ export default function Leads() {
     const [selectedLead, setSelectedLead] = useState(null);
     const [showCallModal, setShowCallModal] = useState(false);
     const [panelLead, setPanelLead] = useState(null);
+    const [stats, setStats] = useState({ total: 0, closed: 0, dialled: 0, open: 0 });
 
     // Resizable columns hook
     const { columnWidths, handleResizeStart, resetWidths } = useResizableColumns(
@@ -76,6 +77,10 @@ export default function Leads() {
 
             setLeads(fetchedLeads);
             setTotal(data.total || 0);
+
+            // Fetch overall stats
+            const statsData = await leadsApi.getStats();
+            setStats(statsData);
         } catch (error) {
             console.error('Failed to fetch leads:', error);
         } finally {
@@ -119,10 +124,15 @@ export default function Leads() {
             fetchLeads();
         });
 
+        socketService.onCallLogCreated(() => {
+            fetchLeads();
+        });
+
         return () => {
             socketService.off('lead:updated');
             socketService.off('lead:deleted');
             socketService.off('lead:bulk-created');
+            socketService.off('callLog:created');
         };
     }, []);
 
@@ -173,7 +183,15 @@ export default function Leads() {
                 <div className="page-header">
                     <div>
                         <h1 className="page-title">Leads</h1>
-                        <p className="text-muted">{total} total leads</p>
+                        <p className="text-muted flex items-center gap-2 flex-wrap">
+                            <span>{stats.total} Leads</span>
+                            <span className="text-xs opacity-20">|</span>
+                            <span>{stats.closed} Closed</span>
+                            <span className="text-xs opacity-20">|</span>
+                            <span>{stats.open} Open</span>
+                            <span className="text-xs opacity-20">|</span>
+                            <span>{stats.dialled} Dialled</span>
+                        </p>
                     </div>
                     <button
                         className="btn btn-ghost btn-sm hidden-mobile"
