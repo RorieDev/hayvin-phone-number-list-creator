@@ -97,6 +97,9 @@ export default function Leads() {
     }, [searchQuery]);
 
     useEffect(() => {
+        // Subscribe to leads socket room
+        socketService.subscribe('leads');
+
         socketService.onLeadUpdated((lead) => {
             setLeads(prev => {
                 const updated = prev.map(l => l.id === lead.id ? lead : l);
@@ -123,7 +126,7 @@ export default function Leads() {
             socketService.off('lead:deleted');
             socketService.off('lead:bulk-created');
         };
-    }, [panelLead?.id]);
+    }, []);
 
     const handleStatusChange = async (leadId, newStatus) => {
         try {
