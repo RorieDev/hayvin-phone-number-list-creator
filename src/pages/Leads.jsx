@@ -167,6 +167,10 @@ export default function Leads() {
     const handleLeadUpdate = async (leadId, updates) => {
         try {
             await leadsApi.update(leadId, updates);
+            // Close panel if marking as not interested
+            if (updates.status === 'not_interested') {
+                setPanelLead(null);
+            }
         } catch (error) {
             console.error('Failed to update lead:', error);
             throw error;
