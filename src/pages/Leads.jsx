@@ -297,12 +297,13 @@ export default function Leads() {
                                         <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>
                                             {lead.phone_number ? (
                                                 <div className="flex items-center gap-2">
-                                                    {lead.status === 'not_interested' && (
+                                                    {lead.status === 'not_interested' ? (
                                                         <span title="Not interested">🛑</span>
-                                                    )}
-                                                    {lead.status !== 'not_interested' && lead.call_logs && lead.call_logs.length > 0 && (
-                                                        <span title="Interaction logged">🚧</span>
-                                                    )}
+                                                    ) : lead.call_logs && lead.call_logs.length > 0 ? (
+                                                        <span title={formatCallOutcome(getLatestCallOutcome(lead.call_logs))}>
+                                                            {getOutcomeIcon(getLatestCallOutcome(lead.call_logs))}
+                                                        </span>
+                                                    ) : null}
                                                     <span className="hidden-mobile" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.phone_number}</span>
                                                     <a
                                                         href={`tel:${lead.phone_number}`}
@@ -480,4 +481,22 @@ function formatCallOutcome(outcome) {
         'do_not_call': 'Do Not Call'
     };
     return outcomeMap[outcome] || outcome?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/**
+ * Get emoji icon for call outcome
+ */
+function getOutcomeIcon(outcome) {
+    const iconMap = {
+        'answered': '✅',
+        'voicemail': '📟',
+        'no_answer': '🔇',
+        'busy': '📵',
+        'callback_scheduled': '🗓️',
+        'qualified': '⭐',
+        'not_interested': '🛑',
+        'wrong_number': '📵',
+        'do_not_call': '🚫'
+    };
+    return iconMap[outcome] || '🚧';
 }
