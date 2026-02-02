@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { scoreLead, getScoreColor } from '../lib/leadScoring';
 import { createDemoEvent, createCallbackEvent } from '../lib/calendarService';
+import { callLogsApi } from '../lib/api';
 
 /**
  * LeadInsightPanel - Right-hand panel showing detailed lead intelligence
@@ -327,7 +328,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
             {/* Sticky Footer Actions */}
             <div className="lead-insight-footer">
                 <div className="lead-insight-secondary-actions">
-                    <button 
+                    <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => createDemoEvent(lead)}
                         title="Add 30-minute demo to calendar"
@@ -335,7 +336,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         <Calendar size={14} />
                         Book Demo
                     </button>
-                    <button 
+                    <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => createCallbackEvent(lead)}
                         title="Schedule 30-minute callback"
@@ -343,9 +344,22 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         <Clock size={14} />
                         Set Callback
                     </button>
-                    <button 
+                    <button
                         className="btn btn-ghost btn-sm lead-insight-not-interested"
-                        onClick={() => onUpdate?.(lead.id, { status: 'not_interested' })}
+                        onClick={async () => {
+                            // Create a call log entry for tracking
+                            try {
+                                await callLogsApi.create({
+                                    lead_id: lead.id,
+                                    campaign_id: lead.campaign_id,
+                                    call_outcome: 'not_interested',
+                                    notes: null
+                                });
+                            } catch (err) {
+                                console.error('Failed to log call:', err);
+                            }
+                            // Status update will be handled by the server via the call log
+                        }}
                         title="Mark as not interested"
                     >
                         <XCircle size={14} />
