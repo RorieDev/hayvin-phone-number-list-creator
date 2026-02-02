@@ -382,9 +382,15 @@ export default function Leads() {
                                             )}
                                         </td>
                                         <td style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
-                                            <span className={`badge badge-${lead.status}`}>
-                                                {lead.status?.replace('_', ' ')}
-                                            </span>
+                                            {lead.call_logs && lead.call_logs.length > 0 ? (
+                                                <span className="badge badge-neutral">
+                                                    {formatCallOutcome(lead.call_logs[0].call_outcome)}
+                                                </span>
+                                            ) : (
+                                                <span className={`badge badge-${lead.status}`}>
+                                                    {lead.status?.replace('_', ' ')}
+                                                </span>
+                                            )}
                                         </td>
 
                                         <td style={{ width: columnWidths.actions }}>
@@ -518,4 +524,22 @@ export default function Leads() {
             )}
         </div>
     );
+}
+
+/**
+ * Format call outcome for display in status column
+ */
+function formatCallOutcome(outcome) {
+    const outcomeMap = {
+        'answered': 'Answered',
+        'voicemail': 'Voicemail',
+        'no_answer': 'No Answer',
+        'busy': 'Busy',
+        'callback_scheduled': 'Callback',
+        'qualified': 'Qualified',
+        'not_interested': 'Not Interested',
+        'wrong_number': 'Wrong Number',
+        'do_not_call': 'Do Not Call'
+    };
+    return outcomeMap[outcome] || outcome?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
