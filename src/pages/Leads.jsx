@@ -248,7 +248,7 @@ export default function Leads() {
                                         columnId="email"
                                         width={columnWidths.email}
                                         onResizeStart={handleResizeStart}
-                                        className="text-center"
+                                        className="text-center hidden-mobile"
                                         style={{ paddingLeft: 0, paddingRight: 0 }}
                                     >
                                         <div style={{ width: '100%', textAlign: 'center' }}>Email</div>
@@ -257,6 +257,7 @@ export default function Leads() {
                                         columnId="score"
                                         width={columnWidths.score}
                                         onResizeStart={handleResizeStart}
+                                        className="hidden-mobile"
                                     >
                                         Score
                                     </ResizableHeader>
@@ -271,6 +272,7 @@ export default function Leads() {
                                         columnId="rating"
                                         width={columnWidths.rating}
                                         onResizeStart={handleResizeStart}
+                                        className="hidden-mobile"
                                     >
                                         Rating
                                     </ResizableHeader>
@@ -278,10 +280,11 @@ export default function Leads() {
                                         columnId="status"
                                         width={columnWidths.status}
                                         onResizeStart={handleResizeStart}
+                                        className="hidden-mobile"
                                     >
                                         Status
                                     </ResizableHeader>
-                                    <th style={{ width: columnWidths.actions, minWidth: columnWidths.actions }}></th>
+                                    <th className="hidden-mobile" style={{ width: columnWidths.actions, minWidth: columnWidths.actions }}></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -314,7 +317,7 @@ export default function Leads() {
                                                 <span className="text-muted">No phone</span>
                                             )}
                                         </td>
-                                        <td style={{ width: columnWidths.email, maxWidth: columnWidths.email, paddingLeft: 0, paddingRight: 0 }}>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.email, maxWidth: columnWidths.email, paddingLeft: 0, paddingRight: 0 }}>
                                             <div className="flex items-center justify-center" style={{ width: '100%' }}>
                                                 {lead.email ? (
                                                     <a
@@ -333,7 +336,7 @@ export default function Leads() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
                                             <LeadScoreBadge lead={lead} showBand={false} compact />
                                         </td>
                                         <td style={{ width: columnWidths.business, maxWidth: columnWidths.business }}>
@@ -357,7 +360,7 @@ export default function Leads() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ width: columnWidths.rating, maxWidth: columnWidths.rating }}>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.rating, maxWidth: columnWidths.rating }}>
                                             {lead.rating ? (
                                                 <div className="flex items-center gap-1">
                                                     <Star size={14} style={{ color: '#fbbf24', fill: '#fbbf24', flexShrink: 0 }} />
@@ -368,7 +371,7 @@ export default function Leads() {
                                                 <span className="text-muted">—</span>
                                             )}
                                         </td>
-                                        <td style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
                                             {lead.call_logs && lead.call_logs.length > 0 ? (
                                                 <span className="badge badge-neutral">
                                                     {formatCallOutcome(getLatestCallOutcome(lead.call_logs))}
@@ -380,7 +383,7 @@ export default function Leads() {
                                             )}
                                         </td>
 
-                                        <td style={{ width: columnWidths.actions }}>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.actions }}>
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     className="btn btn-ghost btn-sm"
@@ -446,14 +449,14 @@ export default function Leads() {
  */
 function getLatestCallOutcome(callLogs) {
     if (!callLogs || callLogs.length === 0) return null;
-    
+
     // Sort by called_at date (most recent first) and return the outcome
     const sorted = [...callLogs].sort((a, b) => {
         const dateA = new Date(a.called_at).getTime();
         const dateB = new Date(b.called_at).getTime();
         return dateB - dateA;
     });
-    
+
     return sorted[0]?.call_outcome;
 }
 
