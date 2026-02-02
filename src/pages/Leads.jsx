@@ -294,6 +294,9 @@ export default function Leads() {
                                         <td style={{ width: columnWidths.phone, maxWidth: columnWidths.phone }}>
                                             {lead.phone_number ? (
                                                 <div className="flex items-center gap-2">
+                                                    {lead.call_logs && lead.call_logs.length > 0 && (
+                                                        <span title="Interaction logged">🚧</span>
+                                                    )}
                                                     <span className="hidden-mobile" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.phone_number}</span>
                                                     <a
                                                         href={`tel:${lead.phone_number}`}

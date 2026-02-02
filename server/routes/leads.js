@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
         let query = supabase
             .from('leads')
-            .select('*', { count: 'exact' })
+            .select('*, call_logs(id)', { count: 'exact' })
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
