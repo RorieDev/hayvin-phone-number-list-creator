@@ -490,8 +490,8 @@ function getOutcomeIcon(outcome) {
     const iconMap = {
         'answered': '✅',
         'voicemail': '📟',
-        'no_answer': '🔇',
-        'busy': '📵',
+        'no_answer': '📵',
+        'busy': '🚦',
         'callback_scheduled': '🗓️',
         'qualified': '⭐',
         'not_interested': '🛑',
