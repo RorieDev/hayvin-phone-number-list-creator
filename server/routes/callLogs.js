@@ -136,18 +136,23 @@ router.get('/stats/today', async (req, res) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        let query = supabase
+        // Count unique leads called today (distinct lead_ids)
+        let uniqueLeadsQuery = supabase
             .from('call_logs')
-            .select('call_outcome', { count: 'exact' })
+            .select('lead_id')
             .gte('called_at', today.toISOString());
 
         if (campaign_id) {
-            query = query.eq('campaign_id', campaign_id);
+            uniqueLeadsQuery = uniqueLeadsQuery.eq('campaign_id', campaign_id);
         }
 
-        const { data, error, count } = await query;
+        const { data: callLogs, error } = await uniqueLeadsQuery;
 
         if (error) throw error;
+
+        // Count unique lead_ids (one lead called multiple times = 1 dial)
+        const uniqueLeadIds = new Set(callLogs?.map(log => log.lead_id) || []);
+        const count = uniqueLeadIds.size;
 
         // Count by outcome
         const outcomes = {};

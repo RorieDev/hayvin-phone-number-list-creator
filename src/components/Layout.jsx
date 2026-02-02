@@ -47,9 +47,14 @@ export default function Layout({ children }) {
 
         fetchToday();
 
-        const onNewCall = (callLog) => {
-            // When a new call log is created, increment the counter
-            setTodayDials((n) => n + 1);
+        const onNewCall = async () => {
+            // When a new call log is created, refetch to get accurate unique lead count
+            try {
+                const data = await callLogsApi.getTodayStats();
+                setTodayDials(data.total_calls || 0);
+            } catch (err) {
+                console.error('Failed to fetch today stats', err);
+            }
         };
 
         socketService.onCallLogCreated(onNewCall);
@@ -115,7 +120,7 @@ export default function Layout({ children }) {
                         color: 'var(--text-muted)',
                         textAlign: 'center'
                     }}>
-                        <strong style={{ color: 'var(--text-primary)' }}>{todayDials}</strong> / 100 Dials/Day Goal
+                        <strong style={{ color: 'var(--text-primary)' }}>{todayDials}</strong> Dials Today
                     </div>
                 </div>
             </aside>
