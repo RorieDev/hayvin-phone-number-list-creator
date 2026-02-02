@@ -6,7 +6,6 @@ import {
     ExternalLink,
     Star,
     MapPin,
-    MoreVertical,
     Trash2,
     ClipboardList,
     Mail,
@@ -49,7 +48,6 @@ export default function Leads() {
     const [total, setTotal] = useState(0);
     const [selectedLead, setSelectedLead] = useState(null);
     const [showCallModal, setShowCallModal] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null);
     const [panelLead, setPanelLead] = useState(null);
 
     // Resizable columns hook
@@ -128,21 +126,11 @@ export default function Leads() {
         };
     }, []);
 
-    const handleStatusChange = async (leadId, newStatus) => {
-        try {
-            await leadsApi.update(leadId, { status: newStatus });
-            setActiveDropdown(null);
-        } catch (error) {
-            console.error('Failed to update status:', error);
-        }
-    };
-
     const handleDelete = async (leadId) => {
         if (!confirm('Are you sure you want to delete this lead?')) return;
 
         try {
             await leadsApi.delete(leadId);
-            setActiveDropdown(null);
         } catch (error) {
             console.error('Failed to delete lead:', error);
         }
@@ -151,7 +139,6 @@ export default function Leads() {
     const handleLogCall = (lead) => {
         setSelectedLead(lead);
         setShowCallModal(true);
-        setActiveDropdown(null);
     };
 
     const handleRowClick = (lead, e) => {
@@ -402,78 +389,14 @@ export default function Leads() {
                                                 >
                                                     <ClipboardList size={16} />
                                                 </button>
-                                                <div style={{ position: 'relative' }}>
-                                                    <button
-                                                        className="btn btn-ghost btn-icon"
-                                                        onClick={() => setActiveDropdown(activeDropdown === lead.id ? null : lead.id)}
-                                                    >
-                                                        <MoreVertical size={18} />
-                                                    </button>
-
-                                                    {activeDropdown === lead.id && (
-                                                        <div style={{
-                                                            position: 'absolute',
-                                                            right: 0,
-                                                            top: '100%',
-                                                            background: 'var(--bg-secondary)',
-                                                            border: '1px solid var(--border-color)',
-                                                            borderRadius: 'var(--radius-md)',
-                                                            boxShadow: 'var(--shadow-xl)',
-                                                            zIndex: 50,
-                                                            minWidth: 180,
-                                                            overflow: 'hidden'
-                                                        }}>
-                                                            <div style={{
-                                                                padding: 'var(--space-2) var(--space-4)',
-                                                                fontSize: 'var(--font-size-xs)',
-                                                                color: 'var(--text-muted)',
-                                                            }}>
-                                                                Change Status
-                                                            </div>
-
-                                                            {STATUS_OPTIONS.filter(s => s.value && s.value !== lead.status).map(status => (
-                                                                <button
-                                                                    key={status.value}
-                                                                    className="w-full"
-                                                                    style={{
-                                                                        padding: 'var(--space-2) var(--space-4)',
-                                                                        color: 'var(--text-secondary)',
-                                                                        border: 'none',
-                                                                        background: 'none',
-                                                                        cursor: 'pointer',
-                                                                        textAlign: 'left',
-                                                                        fontSize: 'var(--font-size-sm)'
-                                                                    }}
-                                                                    onClick={() => handleStatusChange(lead.id, status.value)}
-                                                                    onMouseOver={(e) => e.target.style.background = 'var(--bg-tertiary)'}
-                                                                    onMouseOut={(e) => e.target.style.background = 'none'}
-                                                                >
-                                                                    {status.label}
-                                                                </button>
-                                                            ))}
-
-                                                            <button
-                                                                className="flex items-center gap-2 w-full"
-                                                                style={{
-                                                                    padding: 'var(--space-3) var(--space-4)',
-                                                                    color: 'var(--error-500)',
-                                                                    border: 'none',
-                                                                    background: 'none',
-                                                                    cursor: 'pointer',
-                                                                    textAlign: 'left',
-                                                                    fontSize: 'var(--font-size-sm)',
-                                                                    borderTop: '1px solid var(--border-color-light)'
-                                                                }}
-                                                                onClick={() => handleDelete(lead.id)}
-                                                                onMouseOver={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
-                                                                onMouseOut={(e) => e.target.style.background = 'none'}
-                                                            >
-                                                                <Trash2 size={16} />
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <button
+                                                    className="btn btn-ghost btn-sm"
+                                                    onClick={() => handleDelete(lead.id)}
+                                                    title="Delete Lead"
+                                                    style={{ color: 'var(--error-500)' }}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
                                                 <ChevronRight size={16} className="text-muted" />
                                             </div>
                                         </td>
@@ -512,14 +435,6 @@ export default function Leads() {
                         setShowCallModal(false);
                         setSelectedLead(null);
                     }}
-                />
-            )}
-
-            {/* Click outside to close dropdown */}
-            {activeDropdown && (
-                <div
-                    style={{ position: 'fixed', inset: 0, zIndex: 40 }}
-                    onClick={() => setActiveDropdown(null)}
                 />
             )}
         </div>
