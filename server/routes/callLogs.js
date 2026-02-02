@@ -84,6 +84,8 @@ router.post('/', async (req, res) => {
         switch (call_outcome) {
             case 'answered':
             case 'voicemail':
+            case 'no_answer':
+            case 'busy':
                 newStatus = 'contacted';
                 break;
             case 'callback_scheduled':
@@ -98,7 +100,7 @@ router.post('/', async (req, res) => {
                 newStatus = 'not_interested';
                 break;
             default:
-                newStatus = null;
+                newStatus = 'contacted'; // Default to contacted if any log is created
         }
 
         // Always update last_called_at, regardless of outcome
