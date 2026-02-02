@@ -11,7 +11,8 @@ router.get('/', async (req, res) => {
 
         let query = supabase
             .from('leads')
-            .select('*, call_logs(id)', { count: 'exact' })
+            // include call outcome and called_at so frontend can show latest outcome without extra fetch
+            .select('*, call_logs(call_outcome, called_at)', { count: 'exact' })
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
