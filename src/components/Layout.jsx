@@ -10,6 +10,8 @@ import {
     Menu,
     X
 } from 'lucide-react';
+import { socketService } from '../lib/socket';
+import { callLogsApi } from '../lib/api';
 
 const navItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -21,12 +23,42 @@ const navItems = [
 
 export default function Layout({ children }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [todayDials, setTodayDials] = useState(0);
     const location = useLocation();
 
     // Close menu when route changes
     useEffect(() => {
         setIsMenuOpen(false);
     }, [location]);
+
+    // Fetch today's dial count and subscribe to real-time updates
+    useEffect(() => {
+        let mounted = true;
+
+        async function fetchToday() {
+            try {
+                const data = await callLogsApi.getTodayStats();
+                if (!mounted) return;
+                setTodayDials(data.total_calls || 0);
+            } catch (err) {
+                console.error('Failed to fetch today stats', err);
+            }
+        }
+
+        fetchToday();
+
+        const onNewCall = (callLog) => {
+            // When a new call log is created, increment the counter
+            setTodayDials((n) => n + 1);
+        };
+
+        socketService.onCallLogCreated(onNewCall);
+
+        return () => {
+            mounted = false;
+            socketService.off('callLog:created');
+        };
+    }, []);
 
     // Close menu when clicking outside (on overlay)
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -83,7 +115,7 @@ export default function Layout({ children }) {
                         color: 'var(--text-muted)',
                         textAlign: 'center'
                     }}>
-                        100 Dials/Day Goal
+                        <strong style={{ color: 'var(--text-primary)' }}>{todayDials}</strong> / 100 Dials/Day Goal
                     </div>
                 </div>
             </aside>
