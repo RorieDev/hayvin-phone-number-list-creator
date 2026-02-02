@@ -245,6 +245,21 @@ export default function Leads() {
                                         Number
                                     </ResizableHeader>
                                     <ResizableHeader
+                                        columnId="business"
+                                        width={columnWidths.business}
+                                        onResizeStart={handleResizeStart}
+                                    >
+                                        Business
+                                    </ResizableHeader>
+                                    <ResizableHeader
+                                        columnId="status"
+                                        width={columnWidths.status}
+                                        onResizeStart={handleResizeStart}
+                                        className="hidden-mobile"
+                                    >
+                                        Status
+                                    </ResizableHeader>
+                                    <ResizableHeader
                                         columnId="email"
                                         width={columnWidths.email}
                                         onResizeStart={handleResizeStart}
@@ -262,27 +277,12 @@ export default function Leads() {
                                         Score
                                     </ResizableHeader>
                                     <ResizableHeader
-                                        columnId="business"
-                                        width={columnWidths.business}
-                                        onResizeStart={handleResizeStart}
-                                    >
-                                        Business
-                                    </ResizableHeader>
-                                    <ResizableHeader
                                         columnId="rating"
                                         width={columnWidths.rating}
                                         onResizeStart={handleResizeStart}
                                         className="hidden-mobile"
                                     >
                                         Rating
-                                    </ResizableHeader>
-                                    <ResizableHeader
-                                        columnId="status"
-                                        width={columnWidths.status}
-                                        onResizeStart={handleResizeStart}
-                                        className="hidden-mobile"
-                                    >
-                                        Status
                                     </ResizableHeader>
                                     <th className="hidden-mobile" style={{ width: columnWidths.actions, minWidth: columnWidths.actions }}></th>
                                 </tr>
@@ -317,6 +317,38 @@ export default function Leads() {
                                                 <span className="text-muted">No phone</span>
                                             )}
                                         </td>
+                                        <td style={{ width: columnWidths.business, maxWidth: columnWidths.business }}>
+                                            <div className="flex items-center gap-2">
+                                                <div style={{ overflow: 'hidden' }}>
+                                                    <div className="font-medium" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                        {lead.business_name}
+                                                    </div>
+                                                    {lead.website && (
+                                                        <a
+                                                            href={lead.website}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs flex items-center gap-1 hidden-mobile"
+                                                            style={{ color: 'var(--primary-400)' }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            Visit website <ExternalLink size={10} />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="hidden-mobile" style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
+                                            {lead.call_logs && lead.call_logs.length > 0 ? (
+                                                <span className="badge badge-neutral">
+                                                    {formatCallOutcome(getLatestCallOutcome(lead.call_logs))}
+                                                </span>
+                                            ) : (
+                                                <span className={`badge badge-${lead.status}`}>
+                                                    {lead.status?.replace('_', ' ')}
+                                                </span>
+                                            )}
+                                        </td>
                                         <td className="hidden-mobile" style={{ width: columnWidths.email, maxWidth: columnWidths.email, paddingLeft: 0, paddingRight: 0 }}>
                                             <div className="flex items-center justify-center" style={{ width: '100%' }}>
                                                 {lead.email ? (
@@ -339,27 +371,6 @@ export default function Leads() {
                                         <td className="hidden-mobile" style={{ width: columnWidths.score, maxWidth: columnWidths.score }}>
                                             <LeadScoreBadge lead={lead} showBand={false} compact />
                                         </td>
-                                        <td style={{ width: columnWidths.business, maxWidth: columnWidths.business }}>
-                                            <div className="flex items-center gap-2">
-                                                <div style={{ overflow: 'hidden' }}>
-                                                    <div className="font-medium" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                        {lead.business_name}
-                                                    </div>
-                                                    {lead.website && (
-                                                        <a
-                                                            href={lead.website}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-xs flex items-center gap-1 hidden-mobile"
-                                                            style={{ color: 'var(--primary-400)' }}
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        >
-                                                            Visit website <ExternalLink size={10} />
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </td>
                                         <td className="hidden-mobile" style={{ width: columnWidths.rating, maxWidth: columnWidths.rating }}>
                                             {lead.rating ? (
                                                 <div className="flex items-center gap-1">
@@ -369,17 +380,6 @@ export default function Leads() {
                                                 </div>
                                             ) : (
                                                 <span className="text-muted">—</span>
-                                            )}
-                                        </td>
-                                        <td className="hidden-mobile" style={{ width: columnWidths.status, maxWidth: columnWidths.status }}>
-                                            {lead.call_logs && lead.call_logs.length > 0 ? (
-                                                <span className="badge badge-neutral">
-                                                    {formatCallOutcome(getLatestCallOutcome(lead.call_logs))}
-                                                </span>
-                                            ) : (
-                                                <span className={`badge badge-${lead.status}`}>
-                                                    {lead.status?.replace('_', ' ')}
-                                                </span>
                                             )}
                                         </td>
 
@@ -412,35 +412,39 @@ export default function Leads() {
             </div>
 
             {/* Lead Insight Panel */}
-            {panelLead && (
-                <>
-                    <div
-                        className="lead-insight-overlay"
-                        onClick={() => setPanelLead(null)}
-                    />
-                    <LeadInsightPanel
-                        lead={panelLead}
-                        onClose={() => setPanelLead(null)}
-                        onUpdate={handleLeadUpdate}
-                        onLogCall={(lead) => {
-                            setSelectedLead(lead);
-                            setShowCallModal(true);
-                        }}
-                    />
-                </>
-            )}
+            {
+                panelLead && (
+                    <>
+                        <div
+                            className="lead-insight-overlay"
+                            onClick={() => setPanelLead(null)}
+                        />
+                        <LeadInsightPanel
+                            lead={panelLead}
+                            onClose={() => setPanelLead(null)}
+                            onUpdate={handleLeadUpdate}
+                            onLogCall={(lead) => {
+                                setSelectedLead(lead);
+                                setShowCallModal(true);
+                            }}
+                        />
+                    </>
+                )
+            }
 
             {/* Log Call Modal */}
-            {showCallModal && selectedLead && (
-                <LogCallModal
-                    lead={selectedLead}
-                    onClose={() => {
-                        setShowCallModal(false);
-                        setSelectedLead(null);
-                    }}
-                />
-            )}
-        </div>
+            {
+                showCallModal && selectedLead && (
+                    <LogCallModal
+                        lead={selectedLead}
+                        onClose={() => {
+                            setShowCallModal(false);
+                            setSelectedLead(null);
+                        }}
+                    />
+                )
+            }
+        </div >
     );
 }
 
