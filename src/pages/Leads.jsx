@@ -240,7 +240,7 @@ export default function Leads() {
                         >
                             Leads
                         </h1>
-                        <p className="text-muted flex items-center gap-2 flex-wrap">
+                        <p className="text-muted flex items-center gap-2 flex-wrap hidden-mobile">
                             <span>{stats.total} Leads</span>
                             <span className="text-xs opacity-20">|</span>
                             <span>{stats.closed} Closed</span>
