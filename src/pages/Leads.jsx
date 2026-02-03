@@ -61,9 +61,9 @@ export default function Leads() {
         60 // minimum width
     );
 
-    const fetchLeads = async () => {
+    const fetchLeads = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
             const params = {};
             if (searchQuery) params.search = searchQuery;
             if (statusFilter) params.status = statusFilter;
@@ -87,9 +87,15 @@ export default function Leads() {
         } catch (error) {
             console.error('Failed to fetch leads:', error);
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     };
+
+    // Keep fetchLeads stable for socket listeners but aware of latest values
+    const fetchLeadsRef = useRef(fetchLeads);
+    useEffect(() => {
+        fetchLeadsRef.current = fetchLeads;
+    }, [searchQuery, statusFilter]);
 
     useEffect(() => {
         fetchLeads();
@@ -106,43 +112,54 @@ export default function Leads() {
         // Subscribe to leads socket room
         socketService.subscribe('leads');
 
-        socketService.onLeadUpdated((lead) => {
-            setLeads(prev => {
-                const updated = prev.map(l => l.id === lead.id ? lead : l);
-                return updated.sort((a, b) => scoreLead(b).score - scoreLead(a).score);
-            });
-            if (panelLead?.id === lead.id) {
-                setPanelLead(lead);
+        const handleLeadUpdate = (lead) => {
+            // Check if lead matches current filter (simplified check)
+            // If it no longer matches, we should re-fetch. 
+            // If it does match, we can just update it in place.
+            if (statusFilter === 'new' && (lead.status !== 'new' || lead.last_called_at)) {
+                fetchLeadsRef.current(true);
+            } else if (statusFilter === 'open_pipeline' && ['not_interested', 'need_closing', 'closed_won', 'closed_lost', 'wrong_number', 'do_not_call'].includes(lead.status)) {
+                fetchLeadsRef.current(true);
+            } else {
+                setLeads(prev => {
+                    const updated = prev.map(l => l.id === lead.id ? lead : l);
+                    return updated.sort((a, b) => scoreLead(b).score - scoreLead(a).score);
+                });
             }
-        });
+
+            // Note: panelLead here will be stale because of empty dependency array or wrong dependencies.
+            // Using a ref for panelLead would be better if we needed the latest panelLead here.
+            // But for now let's just use the lead object directly for state updates.
+            setPanelLead(current => current?.id === lead.id ? lead : current);
+        };
+
+        socketService.onLeadUpdated(handleLeadUpdate);
 
         socketService.onLeadDeleted(({ id }) => {
             setLeads(prev => prev.filter(l => l.id !== id));
-            if (panelLead?.id === id) {
-                setPanelLead(null);
-            }
+            setPanelLead(current => current?.id === id ? null : current);
         });
 
         socketService.onLeadBulkCreated(() => {
-            fetchLeads();
+            fetchLeadsRef.current(true);
         });
 
         socketService.onCallLogCreated(() => {
-            fetchLeads();
+            fetchLeadsRef.current(true);
         });
 
         socketService.onCallLogDeleted(() => {
-            fetchLeads();
+            fetchLeadsRef.current(true);
         });
 
         return () => {
-            socketService.off('lead:updated');
+            socketService.off('lead:updated', handleLeadUpdate);
             socketService.off('lead:deleted');
             socketService.off('lead:bulk-created');
             socketService.off('callLog:created');
             socketService.off('callLog:deleted');
         };
-    }, []);
+    }, [statusFilter]);
 
     const handleDelete = async (leadId) => {
         if (!confirm('Are you sure you want to delete this lead?')) return;

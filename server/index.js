@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 
 // Socket.IO setup
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''),
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
@@ -43,7 +43,7 @@ initializeSocket(io);
 app.set('io', io);
 
 // Middleware
-app.use(cors()); // Allow all origins for simplicity and to avoid CORS issues in production
+app.use(cors({ origin: allowedOrigins })); // Allow all origins for simplicity and to avoid CORS issues in production
 app.use(express.json());
 
 // API Routes
