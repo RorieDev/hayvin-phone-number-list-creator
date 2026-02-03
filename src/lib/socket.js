@@ -12,22 +12,18 @@ const SOCKET_URL = getSocketUrl();
 
 class SocketService {
     constructor() {
-        this.socket = null;
-        this.listeners = new Map();
-    }
-
-    connect() {
-        if (this.socket?.connected) return;
-
         this.socket = io(SOCKET_URL, {
             transports: ['websocket', 'polling'],
+            autoConnect: false,
             reconnection: true,
-            reconnectionAttempts: 5,
+            reconnectionAttempts: 10,
             reconnectionDelay: 1000
         });
 
+        this.listeners = new Map();
+
         this.socket.on('connect', () => {
-            console.log('🔌 Socket connected');
+            console.log('🔌 Socket connected:', this.socket.id);
             // Re-subscribe to rooms on reconnect
             this.subscribe('leads');
             this.subscribe('campaigns');
@@ -43,28 +39,33 @@ class SocketService {
         });
     }
 
+    connect() {
+        if (this.socket.connected) return;
+        this.socket.connect();
+    }
+
     disconnect() {
         if (this.socket) {
             this.socket.disconnect();
-            this.socket = null;
         }
     }
 
     subscribe(room) {
-        if (!this.socket || !this.socket.connected) {
-            // If socket isn't ready, try again in a moment
-            setTimeout(() => this.subscribe(room), 500);
+        if (!this.socket.connected) {
+            // Wait for connect
+            const onConnect = () => {
+                this.socket.emit(`subscribe:${room}`);
+                this.socket.off('connect', onConnect);
+            };
+            this.socket.on('connect', onConnect);
             return;
         }
         this.socket.emit(`subscribe:${room}`);
     }
 
     on(event, callback) {
-        if (!this.socket) return;
-
         this.socket.on(event, callback);
 
-        // Track listeners for cleanup
         if (!this.listeners.has(event)) {
             this.listeners.set(event, []);
         }
@@ -72,8 +73,6 @@ class SocketService {
     }
 
     off(event, callback) {
-        if (!this.socket) return;
-
         if (callback) {
             this.socket.off(event, callback);
         } else {

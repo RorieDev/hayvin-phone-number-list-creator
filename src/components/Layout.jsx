@@ -59,6 +59,7 @@ export default function Layout({ children }) {
             }
         };
 
+        socketService.subscribe('call-logs');
         socketService.onCallLogCreated(onNewCall);
 
         return () => {

@@ -52,6 +52,10 @@ export default function Leads() {
     const [selectedLead, setSelectedLead] = useState(null);
     const [showCallModal, setShowCallModal] = useState(false);
     const [panelLead, setPanelLead] = useState(null);
+    const panelLeadRef = useRef(panelLead);
+    useEffect(() => {
+        panelLeadRef.current = panelLead;
+    }, [panelLead]);
     const [stats, setStats] = useState({ total: 0, closed: 0, dialled: 0, open: 0 });
 
     // Resizable columns hook
@@ -109,8 +113,9 @@ export default function Leads() {
     }, [searchQuery]);
 
     useEffect(() => {
-        // Subscribe to leads socket room
+        // Subscribe to leads and call-logs socket rooms
         socketService.subscribe('leads');
+        socketService.subscribe('call-logs');
 
         const handleLeadUpdate = (lead) => {
             // Check if lead matches current filter (simplified check)
@@ -130,7 +135,12 @@ export default function Leads() {
             // Note: panelLead here will be stale because of empty dependency array or wrong dependencies.
             // Using a ref for panelLead would be better if we needed the latest panelLead here.
             // But for now let's just use the lead object directly for state updates.
-            setPanelLead(current => current?.id === lead.id ? lead : current);
+            setPanelLead(current => {
+                if (current?.id === lead.id) {
+                    return { ...current, ...lead };
+                }
+                return current;
+            });
         };
 
         socketService.onLeadUpdated(handleLeadUpdate);
@@ -144,12 +154,25 @@ export default function Leads() {
             fetchLeadsRef.current(true);
         });
 
+        const refreshPanelLead = async () => {
+            if (panelLeadRef.current) {
+                try {
+                    const fullLead = await leadsApi.getById(panelLeadRef.current.id);
+                    setPanelLead(fullLead);
+                } catch (error) {
+                    console.error('Failed to refresh panel lead:', error);
+                }
+            }
+        };
+
         socketService.onCallLogCreated(() => {
             fetchLeadsRef.current(true);
+            refreshPanelLead();
         });
 
         socketService.onCallLogDeleted(() => {
             fetchLeadsRef.current(true);
+            refreshPanelLead();
         });
 
         return () => {

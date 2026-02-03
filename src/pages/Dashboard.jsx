@@ -44,15 +44,28 @@ export default function Dashboard() {
     useEffect(() => {
         fetchData();
 
+        // Subscribe to relevant rooms
+        socketService.subscribe('leads');
+        socketService.subscribe('call-logs');
+        socketService.subscribe('campaigns');
+
         // Real-time updates
         socketService.onLeadUpdated(() => fetchData());
         socketService.onCallLogCreated(() => fetchData());
+        socketService.onCallLogDeleted(() => fetchData());
         socketService.onLeadBulkCreated(() => fetchData());
+        socketService.onCampaignCreated(() => fetchData());
+        socketService.onCampaignUpdated(() => fetchData());
+        socketService.onCampaignDeleted(() => fetchData());
 
         return () => {
             socketService.off('lead:updated');
             socketService.off('callLog:created');
+            socketService.off('callLog:deleted');
             socketService.off('lead:bulk-created');
+            socketService.off('campaign:created');
+            socketService.off('campaign:updated');
+            socketService.off('campaign:deleted');
         };
     }, []);
 

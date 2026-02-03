@@ -61,6 +61,10 @@ export default function CallLogs() {
     }, [selectedCampaign, selectedDate]);
 
     useEffect(() => {
+        // Subscribe to relevant rooms
+        socketService.subscribe('call-logs');
+        socketService.subscribe('campaigns');
+
         socketService.onCallLogCreated((callLog) => {
             setCallLogs(prev => [callLog, ...prev]);
             fetchData(); // Refresh stats
