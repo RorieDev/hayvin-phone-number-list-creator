@@ -21,8 +21,8 @@ router.get('/', async (req, res) => {
                 // 'Open' in UI - all active leads NOT (Not Interested, Needs Closing, Closed Won, Closed Lost)
                 query = query.not('status', 'in', '("not_interested","need_closing","closed_won","closed_lost","wrong_number","do_not_call")');
             } else if (status === 'new') {
-                // 'Fresh' in UI - leads never called
-                query = query.is('last_called_at', null);
+                // 'Fresh' in UI - leads with status 'new' that have never been called
+                query = query.eq('status', 'new').is('last_called_at', null);
             } else if (status === 'contacted') {
                 // 'Contacted' in UI - all dialled leads
                 query = query.not('last_called_at', 'is', null);

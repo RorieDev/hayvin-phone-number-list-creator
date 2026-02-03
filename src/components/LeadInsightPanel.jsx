@@ -39,32 +39,12 @@ import { callLogsApi } from '../lib/api';
  * - Optimal call timing
  * - Quick actions
  */
-const QUICK_LOG_OUTCOMES = [
-    { value: 'not_yet', label: 'Not Yet' },
-    { value: 'answered', label: 'Answered' },
-    { value: 'voicemail', label: 'Voicemail' },
-    { value: 'no_answer', label: 'No Answer' },
-    { value: 'busy', label: 'Busy' },
-    { value: 'callback_scheduled', label: 'Demo booked' },
-    { value: 'need_closing', label: 'Needs Closing' },
-    { value: 'closed_won', label: 'Closed Won' },
-    { value: 'closed_lost', label: 'Closed Lost' },
-    { value: 'not_interested', label: 'Not Interested' },
-    { value: 'wrong_number', label: 'Wrong Number' },
-    { value: 'do_not_call', label: 'Do Not Call' },
-];
-
 export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall }) {
     const [notes, setNotes] = useState('');
     const [notesSaving, setNotesSaving] = useState(false);
     const [notesSaved, setNotesSaved] = useState(false);
+    const [updateSaving, setUpdateSaving] = useState(false);
     const notesTimeoutRef = useRef(null);
-
-    // Quick log form state
-    const [showQuickLog, setShowQuickLog] = useState(false);
-    const [quickLogOutcome, setQuickLogOutcome] = useState('');
-    const [quickLogNotes, setQuickLogNotes] = useState('');
-    const [quickLogSaving, setQuickLogSaving] = useState(false);
 
     // Initialize notes when lead changes
     useEffect(() => {
@@ -348,108 +328,33 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
 
             {/* Sticky Footer Actions */}
             <div className="lead-insight-footer">
-                {/* Quick Log Form */}
-                {showQuickLog && (
-                    <div style={{
-                        padding: 'var(--space-3)',
-                        background: 'var(--bg-tertiary)',
-                        borderRadius: 'var(--radius-md)',
-                        marginBottom: 'var(--space-3)'
-                    }}>
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(3, 1fr)',
-                            gap: 'var(--space-2)',
-                            marginBottom: 'var(--space-3)'
-                        }}>
-                            {QUICK_LOG_OUTCOMES.map((opt) => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    onClick={() => setQuickLogOutcome(opt.value)}
-                                    style={{
-                                        padding: 'var(--space-2)',
-                                        background: quickLogOutcome === opt.value ? 'rgba(20, 184, 166, 0.2)' : 'var(--bg-secondary)',
-                                        border: `1px solid ${quickLogOutcome === opt.value ? 'var(--primary-500)' : 'var(--border-color)'}`,
-                                        borderRadius: 'var(--radius-sm)',
-                                        cursor: 'pointer',
-                                        fontSize: 'var(--font-size-xs)',
-                                        color: quickLogOutcome === opt.value ? 'var(--primary-400)' : 'var(--text-secondary)',
-                                        transition: 'all var(--transition-fast)'
-                                    }}
-                                >
-                                    {opt.label}
-                                </button>
-                            ))}
-                        </div>
-                        <textarea
-                            placeholder="Add notes..."
-                            value={quickLogNotes}
-                            onChange={(e) => setQuickLogNotes(e.target.value)}
-                            rows={2}
-                            style={{
-                                width: '100%',
-                                padding: 'var(--space-2)',
-                                background: 'var(--bg-secondary)',
-                                border: '1px solid var(--border-color)',
-                                borderRadius: 'var(--radius-sm)',
-                                color: 'var(--text-primary)',
-                                fontSize: 'var(--font-size-sm)',
-                                resize: 'none',
-                                marginBottom: 'var(--space-2)'
-                            }}
-                        />
-                        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                            <button
-                                className="btn btn-ghost btn-sm"
-                                onClick={() => {
-                                    setShowQuickLog(false);
-                                    setQuickLogOutcome('');
-                                    setQuickLogNotes('');
-                                }}
-                                style={{ flex: 1 }}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="btn btn-primary btn-sm"
-                                disabled={!quickLogOutcome || quickLogSaving}
-                                onClick={async () => {
-                                    if (!quickLogOutcome) return;
-                                    setQuickLogSaving(true);
-                                    try {
-                                        await callLogsApi.create({
-                                            lead_id: lead.id,
-                                            campaign_id: lead.campaign_id,
-                                            call_outcome: quickLogOutcome,
-                                            notes: quickLogNotes.trim() || null
-                                        });
-                                        setShowQuickLog(false);
-                                        setQuickLogOutcome('');
-                                        setQuickLogNotes('');
-                                    } catch (err) {
-                                        console.error('Failed to log call:', err);
-                                    } finally {
-                                        setQuickLogSaving(false);
-                                    }
-                                }}
-                                style={{ flex: 1 }}
-                            >
-                                {quickLogSaving ? 'Saving...' : 'Save'}
-                            </button>
-                        </div>
-                    </div>
-                )}
-
                 <div className="lead-insight-secondary-actions" style={{ display: 'flex', gap: 'var(--space-3)' }}>
                     <button
                         className="btn btn-primary btn-sm"
-                        onClick={() => setShowQuickLog(!showQuickLog)}
-                        title="Log a call or update status"
+                        disabled={updateSaving || !notes.trim()}
+                        onClick={async () => {
+                            if (!notes.trim()) return;
+                            setUpdateSaving(true);
+                            try {
+                                await callLogsApi.create({
+                                    lead_id: lead.id,
+                                    campaign_id: lead.campaign_id,
+                                    call_outcome: 'not_yet',
+                                    notes: notes.trim()
+                                });
+                                // Clear notes after successful update
+                                setNotes('');
+                            } catch (err) {
+                                console.error('Failed to log update:', err);
+                            } finally {
+                                setUpdateSaving(false);
+                            }
+                        }}
+                        title="Add notes as a call record"
                         style={{ flex: 1 }}
                     >
                         <Phone size={14} />
-                        {showQuickLog ? 'Close' : 'Update'}
+                        {updateSaving ? 'Saving...' : 'Update'}
                     </button>
                     <button
                         className="btn btn-secondary btn-sm"
