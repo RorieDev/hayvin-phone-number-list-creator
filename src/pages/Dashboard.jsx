@@ -56,7 +56,9 @@ export default function Dashboard() {
         };
     }, []);
 
-    const dialProgress = setStats ? (setStats.total_calls / 100) * 100 : 0;
+    const DIAL_GOAL = 100;
+    const percent = setStats ? Math.round((setStats.total_calls / DIAL_GOAL) * 100) : 0;
+    const dialProgress = percent;
 
     if (loading) {
         return (
@@ -91,8 +93,8 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="stat-value" style={{ color: 'var(--primary-400)' }}>
-                                {setStats?.total_calls || 0}
-                                <span style={{ fontSize: 'var(--font-size-lg)', color: 'var(--text-muted)' }}>/100</span>
+                                {percent}
+                                <span style={{ fontSize: 'var(--font-size-lg)', color: 'var(--text-muted)' }}>%</span>
                             </div>
                             <div className="stat-label">Calls in this set</div>
                         </div>

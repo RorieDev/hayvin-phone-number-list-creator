@@ -70,7 +70,9 @@ export default function CallLogs() {
         };
     }, []);
 
-    const dialProgress = setStats ? (setStats.total_calls / 100) * 100 : 0;
+    const DIAL_GOAL = 100;
+    const percent = setStats ? Math.round((setStats.total_calls / DIAL_GOAL) * 100) : 0;
+    const dialProgress = percent;
 
     return (
         <div>
@@ -90,13 +92,13 @@ export default function CallLogs() {
 
                 <div className="flex items-center gap-4" style={{ marginBottom: 'var(--space-4)' }}>
                     <div className="stat-value" style={{ fontSize: 'var(--font-size-4xl)' }}>
-                        {setStats?.total_calls || 0}
+                        {percent}
                         <span style={{
                             fontSize: 'var(--font-size-xl)',
                             color: 'var(--text-muted)',
                             fontWeight: 400
                         }}>
-                            /100
+                            %
                         </span>
                     </div>
                     <div>
