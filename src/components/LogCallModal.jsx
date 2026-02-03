@@ -87,10 +87,10 @@ export default function LogCallModal({ lead, onClose }) {
                     <div className="modal-body">
                         {/* Phone number display */}
                         <div style={{
-                            padding: 'var(--space-4)',
+                            padding: 'var(--space-2)',
                             background: 'var(--bg-tertiary)',
                             borderRadius: 'var(--radius-md)',
-                            marginBottom: 'var(--space-4)',
+                            marginBottom: 'var(--space-2)',
                             textAlign: 'center'
                         }}>
                             <a
@@ -106,16 +106,16 @@ export default function LogCallModal({ lead, onClose }) {
                         </div>
 
                         {/* Outcome Selection */}
-                        <div className="form-group">
-                            <label className="form-label">Call Outcome *</label>
-                            <div className="grid grid-cols-2" style={{ gap: 'var(--space-2)' }}>
+                        <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
+                            <label className="form-label" style={{ marginBottom: 'var(--space-1)' }}>Call Outcome *</label>
+                            <div className="grid grid-cols-2" style={{ gap: 'var(--space-1.5)' }}>
                                 {CALL_OUTCOMES.map((opt) => (
                                     <button
                                         key={opt.value}
                                         type="button"
                                         onClick={() => setOutcome(opt.value)}
                                         style={{
-                                            padding: 'var(--space-3)',
+                                            padding: 'var(--space-2) var(--space-3)',
                                             background: outcome === opt.value ? 'rgba(20, 184, 166, 0.1)' : 'var(--bg-tertiary)',
                                             border: `1px solid ${outcome === opt.value ? 'var(--primary-500)' : 'var(--border-color)'}`,
                                             borderRadius: 'var(--radius-md)',
@@ -149,14 +149,14 @@ export default function LogCallModal({ lead, onClose }) {
                         )}
 
                         {/* Notes */}
-                        <div className="form-group">
-                            <label className="form-label">Notes</label>
+                        <div className="form-group" style={{ marginBottom: 0 }}>
+                            <label className="form-label" style={{ marginBottom: 'var(--space-1)' }}>Notes</label>
                             <textarea
                                 className="form-textarea"
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Add any notes about the call..."
-                                rows={3}
+                                rows={2}
                             />
                         </div>
                     </div>
