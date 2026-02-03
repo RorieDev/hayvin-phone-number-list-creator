@@ -247,6 +247,10 @@ export default function Leads() {
                             <span className="text-xs opacity-20">|</span>
                             <span>{stats.open} Open</span>
                             <span className="text-xs opacity-20">|</span>
+                            <span>{stats.wants_callback || 0} Wants Callback</span>
+                            <span className="text-xs opacity-20">|</span>
+                            <span>{stats.sent_number || 0} Sent Number</span>
+                            <span className="text-xs opacity-20">|</span>
                             <span>{stats.dialled} Dialled</span>
                         </p>
                     </div>
