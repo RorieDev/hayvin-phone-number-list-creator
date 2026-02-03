@@ -327,43 +327,24 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
 
             {/* Sticky Footer Actions */}
             <div className="lead-insight-footer">
-                <div className="lead-insight-secondary-actions">
+                <div className="lead-insight-secondary-actions" style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                    <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => onLogCall?.(lead)}
+                        title="Log a call or update status"
+                        style={{ flex: 1 }}
+                    >
+                        <Phone size={14} />
+                        Update
+                    </button>
                     <button
                         className="btn btn-secondary btn-sm"
                         onClick={() => createDemoEvent(lead)}
                         title="Add 30-minute demo to calendar"
+                        style={{ flex: 1 }}
                     >
                         <Calendar size={14} />
                         Book Demo
-                    </button>
-                    <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => createCallbackEvent(lead)}
-                        title="Schedule 30-minute follow up"
-                    >
-                        <Clock size={14} />
-                        Follow up
-                    </button>
-                    <button
-                        className="btn btn-ghost btn-sm lead-insight-not-interested"
-                        onClick={async () => {
-                            // Create a call log entry for tracking
-                            try {
-                                await callLogsApi.create({
-                                    lead_id: lead.id,
-                                    campaign_id: lead.campaign_id,
-                                    call_outcome: 'not_interested',
-                                    notes: null
-                                });
-                            } catch (err) {
-                                console.error('Failed to log call:', err);
-                            }
-                            // Status update will be handled by the server via the call log
-                        }}
-                        title="Mark as not interested"
-                    >
-                        <XCircle size={14} />
-                        Not Interested
                     </button>
                 </div>
             </div>
