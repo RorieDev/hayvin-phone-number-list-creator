@@ -14,8 +14,19 @@ function App() {
     // Connect to socket on mount
     socketService.connect();
 
+    // Handle visibility change to ensure socket stays connected (crucial for PWA)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log('📱 App became visible, ensuring socket connection...');
+        socketService.connect();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       socketService.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
