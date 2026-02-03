@@ -205,7 +205,6 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-4">
                         {[
                             { status: 'new', label: 'Open', color: 'var(--info-500)', icon: AlertCircle },
-                            { status: 'contacted', label: 'Contacted', color: 'var(--warning-500)', icon: Phone },
                             { status: 'not_interested', label: 'Not Interested', color: 'var(--error-500)', icon: XCircle },
                             { status: 'callback', label: 'Demo booked', color: '#a855f7', icon: Clock },
                             { status: 'need_closing', label: 'Needs Closing', color: 'var(--success-500)', icon: Target },

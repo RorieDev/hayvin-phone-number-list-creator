@@ -23,9 +23,6 @@ router.get('/', async (req, res) => {
             } else if (status === 'new') {
                 // 'Fresh' in UI - leads with status 'new', never called, and no call logs
                 query = query.eq('status', 'new').is('last_called_at', null);
-            } else if (status === 'contacted') {
-                // 'Contacted' in UI - all dialled leads
-                query = query.not('last_called_at', 'is', null);
             } else {
                 query = query.eq('status', status);
             }
@@ -146,7 +143,7 @@ router.get('/stats/overview', async (req, res) => {
         const open = (total || 0) - (closed || 0);
 
         // 5. Get counts for all specific statuses
-        const statuses = ['new', 'contacted', 'callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested'];
+        const statuses = ['new', 'callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested'];
         const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);
@@ -162,8 +159,7 @@ router.get('/stats/overview', async (req, res) => {
             open: open || 0,
             ...counts,
             // Override 'new' to be the Open Pipeline count for the dashboard breakdown
-            new: open || 0,
-            contacted: dialled || 0
+            new: open || 0
         });
     } catch (error) {
         console.error('Get lead stats error:', error);

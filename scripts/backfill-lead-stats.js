@@ -23,35 +23,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function backfill() {
     console.log('Starting lead status backfill...');
 
-    // 1. Get all leads that have been called at least once
-    const { data: dialledLeads, error: leadsError } = await supabase
-        .from('leads')
-        .select('id, status, last_called_at')
-        .not('last_called_at', 'is', null);
-
-    if (leadsError) {
-        console.error('Error fetching leads:', leadsError);
-        return;
-    }
-
-    console.log(`Found ${dialledLeads.length} dialled leads.`);
-
-    let updatedCount = 0;
-    for (const lead of dialledLeads) {
-        // If it's still marked as 'new' but has been called, move it to 'contacted'
-        if (lead.status === 'new') {
-            const { error: updateError } = await supabase
-                .from('leads')
-                .update({ status: 'contacted' })
-                .eq('id', lead.id);
-
-            if (!updateError) {
-                updatedCount++;
-            }
-        }
-    }
-
-    console.log(`Updated ${updatedCount} leads from 'new' to 'contacted'.`);
+    // 1. Get all leads without a last_called_at but having call logs
+    console.log('Syncing last_called_at from call logs...');
 
     // 2. Double check call logs to ensure last_called_at is synced
     const { data: logs, error: logsError } = await supabase

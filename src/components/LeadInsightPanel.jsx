@@ -29,6 +29,7 @@ import {
 import { scoreLead, getScoreColor } from '../lib/leadScoring';
 import { createDemoEvent, createCallbackEvent } from '../lib/calendarService';
 import { callLogsApi } from '../lib/api';
+import { getMailtoLink } from '../lib/emailTemplates';
 
 /**
  * LeadInsightPanel - Right-hand panel showing detailed lead intelligence
@@ -276,7 +277,7 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
 
                     {lead.email && (
                         <a
-                            href={`mailto:${lead.email}`}
+                            href={getMailtoLink(lead.email)}
                             className="lead-insight-website"
                             style={{ marginTop: 'var(--space-2)' }}
                         >

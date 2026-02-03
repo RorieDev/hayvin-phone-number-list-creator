@@ -358,10 +358,6 @@ a:hover {
   color: var(--info-500);
 }
 
-.badge-contacted {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--warning-500);
-}
 
 .badge-callback {
   background: rgba(168, 85, 247, 0.15);
@@ -1675,6 +1671,7 @@ a:hover {
 .table tbody tr.clickable-row.greyed-out:hover {
   background: transparent;
 }
+
 .hover-text-danger:hover {
   color: var(--error-500) !important;
 }

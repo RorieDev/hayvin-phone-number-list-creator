@@ -19,12 +19,12 @@ import LeadInsightPanel from '../components/LeadInsightPanel';
 import LeadScoreBadge from '../components/LeadScoreBadge';
 import { useResizableColumns, ResizableHeader } from '../hooks/useResizableColumns';
 import { scoreLead } from '../lib/leadScoring';
+import { getMailtoLink } from '../lib/emailTemplates';
 
 const STATUS_OPTIONS = [
     { value: '', label: 'All Statuses' },
     { value: 'open_pipeline', label: 'Open' },
     { value: 'new', label: 'Fresh (Uncalled)' },
-    { value: 'contacted', label: 'Contacted' },
     { value: 'callback', label: 'Demo booked' },
     { value: 'need_closing', label: 'Needs Closing' },
     { value: 'closed_won', label: 'Closed Won' },
@@ -427,7 +427,7 @@ export default function Leads() {
                                             <div className="flex items-center justify-center" style={{ width: '100%' }}>
                                                 {lead.email ? (
                                                     <a
-                                                        href={`mailto:${lead.email}?body=${encodeURIComponent("Hi \n\n\n\n\nCheers Rorie from Hayvin.co.uk")}`}
+                                                        href={getMailtoLink(lead.email)}
                                                         className="btn btn-ghost btn-icon"
                                                         style={{ color: 'var(--primary-400)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                                         title={`Email ${lead.email}`}
