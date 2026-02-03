@@ -59,12 +59,12 @@ export default function LogCallModal({ lead, onClose }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal modal--compact" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <div className="flex items-center gap-3">
                         <div style={{
-                            width: 40,
-                            height: 40,
+                            width: 32,
+                            height: 32,
                             borderRadius: 'var(--radius-md)',
                             background: 'rgba(20, 184, 166, 0.1)',
                             display: 'flex',
@@ -96,7 +96,7 @@ export default function LogCallModal({ lead, onClose }) {
                             <a
                                 href={`tel:${lead.phone_number}`}
                                 style={{
-                                    fontSize: 'var(--font-size-xl)',
+                                    fontSize: 'var(--font-size-lg)',
                                     fontWeight: 600,
                                     color: 'var(--primary-400)'
                                 }}
@@ -106,9 +106,9 @@ export default function LogCallModal({ lead, onClose }) {
                         </div>
 
                         {/* Outcome Selection */}
-                        <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
-                            <label className="form-label" style={{ marginBottom: 'var(--space-1)' }}>Call Outcome *</label>
-                            <div className="grid grid-cols-2" style={{ gap: 'var(--space-1.5)' }}>
+                        <div className="form-group" style={{ marginBottom: 'var(--space-2)' }}>
+                            <label className="form-label" style={{ marginBottom: 'var(--space-1)', fontSize: 'var(--font-size-xs)' }}>Call Outcome *</label>
+                            <div className="grid grid-cols-3" style={{ gap: 'var(--space-1.5)' }}>
                                 {CALL_OUTCOMES.map((opt) => (
                                     <button
                                         key={opt.value}
@@ -122,8 +122,11 @@ export default function LogCallModal({ lead, onClose }) {
                                             cursor: 'pointer',
                                             textAlign: 'left',
                                             color: outcome === opt.value ? opt.color : 'var(--text-secondary)',
-                                            fontSize: 'var(--font-size-sm)',
-                                            transition: 'all var(--transition-fast)'
+                                            fontSize: '11px',
+                                            transition: 'all var(--transition-fast)',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis'
                                         }}
                                     >
                                         {opt.label}
@@ -150,7 +153,6 @@ export default function LogCallModal({ lead, onClose }) {
 
                         {/* Notes */}
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <label className="form-label" style={{ marginBottom: 'var(--space-1)' }}>Notes</label>
                             <textarea
                                 className="form-textarea"
                                 value={notes}

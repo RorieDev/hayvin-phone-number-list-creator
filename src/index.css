@@ -1687,3 +1687,24 @@ a:hover {
   color: var(--primary-400);
   transition: color var(--transition-fast);
 }
+
+/* Compact Modal Styles */
+.modal--compact .modal-header {
+  padding: var(--space-3) var(--space-4);
+}
+
+.modal--compact .modal-body {
+  padding: var(--space-3) var(--space-4);
+}
+
+.modal--compact .modal-footer {
+  padding: var(--space-3) var(--space-4);
+}
+
+.modal--compact .modal-title {
+  font-size: var(--font-size-lg);
+}
+
+.modal--compact .form-group {
+  margin-bottom: var(--space-2);
+}
