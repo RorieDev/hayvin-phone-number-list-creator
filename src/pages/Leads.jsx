@@ -207,7 +207,14 @@ export default function Leads() {
             <div className="leads-main" style={{ flex: 1 }}>
                 <div className="page-header">
                     <div>
-                        <h1 className="page-title">Leads</h1>
+                        <h1
+                            className="page-title"
+                            onClick={() => window.location.reload()}
+                            style={{ cursor: 'pointer' }}
+                            title="Click to refresh page"
+                        >
+                            Leads
+                        </h1>
                         <p className="text-muted flex items-center gap-2 flex-wrap">
                             <span>{stats.total} Leads</span>
                             <span className="text-xs opacity-20">|</span>
