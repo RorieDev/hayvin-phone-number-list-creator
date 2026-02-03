@@ -230,38 +230,30 @@ export default function Leads() {
     return (
         <div className={`leads-layout ${panelLead ? 'leads-layout--panel-open' : ''}`}>
             <div className="leads-main" style={{ flex: 1 }}>
-                <div className="page-header">
-                    <div>
+                <div className="page-header" style={{ justifyContent: 'center', textAlign: 'center' }}>
+                    <div style={{ width: '100%' }}>
                         <h1
                             className="page-title"
                             onClick={() => window.location.reload()}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: 'pointer', marginBottom: 'var(--space-2)' }}
                             title="Click to refresh page"
                         >
                             Leads
                         </h1>
-                        <p className="text-muted flex items-center gap-2 flex-wrap hidden-mobile">
+                        <p className="text-muted flex items-center justify-center gap-2 flex-wrap hidden-mobile">
                             <span>{stats.total} Leads</span>
                             <span className="text-xs opacity-20">|</span>
                             <span>{stats.closed} Closed</span>
                             <span className="text-xs opacity-20">|</span>
                             <span>{stats.open} Open</span>
                             <span className="text-xs opacity-20">|</span>
-                            <span>{stats.wants_callback || 0} Wants Callback</span>
+                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.wants_callback || 0} Wants Callback</span>
                             <span className="text-xs opacity-20">|</span>
-                            <span>{stats.sent_number || 0} Sent Number</span>
+                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.sent_number || 0} Sent Number</span>
                             <span className="text-xs opacity-20">|</span>
                             <span>{stats.dialled} Dialled</span>
                         </p>
                     </div>
-                    <button
-                        className="btn btn-ghost btn-sm hidden-mobile"
-                        onClick={fetchLeads}
-                        title="Refresh leads"
-                    >
-                        <RotateCcw size={14} />
-                        Refresh
-                    </button>
                 </div>
 
                 {/* Filters */}
