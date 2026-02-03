@@ -141,8 +141,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Get today's call stats
-router.get('/stats/today', async (req, res) => {
+// Get call stats for the current set (keeps same behavior but route no longer mentions "today")
+router.get('/stats/set', async (req, res) => {
     try {
         const { campaign_id } = req.query;
 

@@ -23,7 +23,7 @@ const navItems = [
 
 export default function Layout({ children }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [todayDials, setTodayDials] = useState(0);
+    const [dialsInSet, setDialsInSet] = useState(0);
     const location = useLocation();
 
     // Close menu when route changes
@@ -31,17 +31,17 @@ export default function Layout({ children }) {
         setIsMenuOpen(false);
     }, [location]);
 
-    // Fetch today's dial count and subscribe to real-time updates
+    // Fetch dial count for the current set and subscribe to real-time updates
     useEffect(() => {
         let mounted = true;
 
         async function fetchToday() {
             try {
-                const data = await callLogsApi.getTodayStats();
+                const data = await callLogsApi.getSetStats();
                 if (!mounted) return;
-                setTodayDials(data.total_calls || 0);
+                setDialsInSet(data.total_calls || 0);
             } catch (err) {
-                console.error('Failed to fetch today stats', err);
+                console.error('Failed to fetch set stats', err);
             }
         }
 
@@ -50,10 +50,10 @@ export default function Layout({ children }) {
         const onNewCall = async () => {
             // When a new call log is created, refetch to get accurate unique lead count
             try {
-                const data = await callLogsApi.getTodayStats();
-                setTodayDials(data.total_calls || 0);
+                const data = await callLogsApi.getSetStats();
+                setDialsInSet(data.total_calls || 0);
             } catch (err) {
-                console.error('Failed to fetch today stats', err);
+                console.error('Failed to fetch set stats', err);
             }
         };
 
@@ -120,7 +120,7 @@ export default function Layout({ children }) {
                         color: 'var(--text-muted)',
                         textAlign: 'center'
                     }}>
-                        <strong style={{ color: 'var(--text-primary)' }}>{todayDials}</strong> Dials Today
+                        <strong style={{ color: 'var(--text-primary)' }}>{dialsInSet}</strong> Dials in this set of leads
                     </div>
                 </div>
             </aside>

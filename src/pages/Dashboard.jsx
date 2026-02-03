@@ -16,7 +16,7 @@ import { socketService } from '../lib/socket';
 
 export default function Dashboard() {
     const [leadStats, setLeadStats] = useState(null);
-    const [todayStats, setTodayStats] = useState(null);
+    const [setStats, setSetStats] = useState(null);
     const [campaigns, setCampaigns] = useState([]);
     const [recentCalls, setRecentCalls] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,13 +25,13 @@ export default function Dashboard() {
         try {
             const [leadsData, todayData, campaignsData, callsData] = await Promise.all([
                 leadsApi.getStats(),
-                callLogsApi.getTodayStats(),
+                callLogsApi.getSetStats(),
                 campaignsApi.getAll(),
                 callLogsApi.getAll({ limit: 5 })
             ]);
 
             setLeadStats(leadsData);
-            setTodayStats(todayData);
+            setSetStats(todayData);
             setCampaigns(campaignsData);
             setRecentCalls(callsData.callLogs || []);
         } catch (error) {
@@ -56,7 +56,7 @@ export default function Dashboard() {
         };
     }, []);
 
-    const dialProgress = todayStats ? (todayStats.total_calls / 100) * 100 : 0;
+    const dialProgress = setStats ? (setStats.total_calls / 100) * 100 : 0;
 
     if (loading) {
         return (
@@ -91,10 +91,10 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="stat-value" style={{ color: 'var(--primary-400)' }}>
-                                {todayStats?.total_calls || 0}
+                                {setStats?.total_calls || 0}
                                 <span style={{ fontSize: 'var(--font-size-lg)', color: 'var(--text-muted)' }}>/100</span>
                             </div>
-                            <div className="stat-label">Calls Today</div>
+                            <div className="stat-label">Calls in this set</div>
                         </div>
                         <div className="stat-icon">
                             <Phone size={24} />

@@ -102,9 +102,9 @@ export const callLogsApi = {
         body: data
     }),
 
-    getTodayStats: (campaignId = null) => {
+    getSetStats: (campaignId = null) => {
         const query = campaignId ? `?campaign_id=${campaignId}` : '';
-        return request(`/call-logs/stats/today${query}`);
+        return request(`/call-logs/stats/set${query}`);
     },
 
     getCallbacks: (campaignId = null) => {

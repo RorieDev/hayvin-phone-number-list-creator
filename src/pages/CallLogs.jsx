@@ -26,7 +26,7 @@ const OUTCOME_CONFIG = {
 
 export default function CallLogs() {
     const [callLogs, setCallLogs] = useState([]);
-    const [todayStats, setTodayStats] = useState(null);
+    const [setStats, setSetStats] = useState(null);
     const [campaigns, setCampaigns] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCampaign, setSelectedCampaign] = useState('');
@@ -41,12 +41,12 @@ export default function CallLogs() {
 
             const [logsData, statsData, campaignsData] = await Promise.all([
                 callLogsApi.getAll(params),
-                callLogsApi.getTodayStats(selectedCampaign || null),
+                callLogsApi.getSetStats(selectedCampaign || null),
                 campaignsApi.getAll()
             ]);
 
             setCallLogs(logsData.callLogs || []);
-            setTodayStats(statsData);
+            setSetStats(statsData);
             setCampaigns(campaignsData);
         } catch (error) {
             console.error('Failed to fetch call logs:', error);
@@ -70,7 +70,7 @@ export default function CallLogs() {
         };
     }, []);
 
-    const dialProgress = todayStats ? (todayStats.total_calls / 100) * 100 : 0;
+    const dialProgress = setStats ? (setStats.total_calls / 100) * 100 : 0;
 
     return (
         <div>
@@ -81,16 +81,16 @@ export default function CallLogs() {
                 </div>
             </div>
 
-            {/* Today's Stats */}
+            {/* Set Stats */}
             <div className="card" style={{ marginBottom: 'var(--space-6)' }}>
                 <h3 className="card-title" style={{ marginBottom: 'var(--space-4)' }}>
                     <Calendar size={18} style={{ display: 'inline', marginRight: 'var(--space-2)' }} />
-                    Today's Progress
+                    Set Progress
                 </h3>
 
                 <div className="flex items-center gap-4" style={{ marginBottom: 'var(--space-4)' }}>
                     <div className="stat-value" style={{ fontSize: 'var(--font-size-4xl)' }}>
-                        {todayStats?.total_calls || 0}
+                        {setStats?.total_calls || 0}
                         <span style={{
                             fontSize: 'var(--font-size-xl)',
                             color: 'var(--text-muted)',
@@ -102,7 +102,7 @@ export default function CallLogs() {
                     <div>
                         <div className="text-sm font-medium">Calls Made</div>
                         <div className="text-xs text-muted">
-                            {Math.max(0, 100 - (todayStats?.total_calls || 0))} remaining
+                            {Math.max(0, 100 - (setStats?.total_calls || 0))} remaining
                         </div>
                     </div>
                 </div>
@@ -115,9 +115,9 @@ export default function CallLogs() {
                 </div>
 
                 {/* Outcome breakdown */}
-                {todayStats && (
+                {setStats && (
                     <div className="grid grid-cols-4" style={{ marginTop: 'var(--space-6)', gap: 'var(--space-3)' }}>
-                        {Object.entries(todayStats.outcomes || {})
+                        {Object.entries(setStats.outcomes || {})
                             .filter(([_, count]) => count > 0)
                             .map(([outcome, count]) => {
                                 const config = OUTCOME_CONFIG[outcome];
