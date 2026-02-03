@@ -771,7 +771,7 @@ a:hover {
 /* Main Content */
 .main-content {
   margin-left: 280px;
-  padding: var(--space-8);
+  padding: var(--space-10) var(--space-8) var(--space-8);
   min-height: 100vh;
 }
 
@@ -949,7 +949,7 @@ a:hover {
 
 /* Mobile Navigation */
 .mobile-header {
-  display: flex !important;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: var(--space-4) var(--space-6);
@@ -1006,7 +1006,7 @@ a:hover {
 
 @media (max-width: 768px) {
   .mobile-header {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     position: fixed;
