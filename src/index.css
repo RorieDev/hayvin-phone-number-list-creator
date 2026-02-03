@@ -949,28 +949,27 @@ a:hover {
 
 /* Mobile Navigation */
 .mobile-header {
-  display: none;
+  display: flex !important;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: var(--space-4) var(--space-6);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 150;
+  height: 60px;
 }
 
 .mobile-logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
   font-weight: 700;
   font-size: var(--font-size-lg);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .menu-toggle {
@@ -985,7 +984,10 @@ a:hover {
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition-fast);
-  position: relative;
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 10;
 }
 
@@ -1006,8 +1008,8 @@ a:hover {
   .mobile-header {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    position: relative;
+    justify-content: center;
+    position: fixed;
   }
 
   .sidebar {
@@ -1025,7 +1027,7 @@ a:hover {
 
   .main-content {
     margin-left: 0;
-    padding: calc(var(--space-4) + 60px) var(--space-4) var(--space-4);
+    padding: calc(var(--space-4) + 120px) var(--space-4) var(--space-4);
   }
 
   .grid-cols-2,
@@ -1046,6 +1048,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: -20px;
   }
 
   .leads-layout {

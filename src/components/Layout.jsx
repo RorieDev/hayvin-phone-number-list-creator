@@ -88,7 +88,7 @@ export default function Layout({ children }) {
         <div className={`layout ${isMenuOpen ? 'menu-open' : ''}`}>
             {/* Mobile Header */}
             <header className="mobile-header">
-                <div className="sidebar-logo" style={{ marginBottom: 0 }}>
+                <div className="mobile-logo">
                     <Zap size={24} fill="var(--primary-400)" stroke="var(--primary-400)" />
                     <span>Hayvin</span>
                 </div>
