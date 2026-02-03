@@ -131,11 +131,16 @@ export default function Leads() {
             fetchLeads();
         });
 
+        socketService.onCallLogDeleted(() => {
+            fetchLeads();
+        });
+
         return () => {
             socketService.off('lead:updated');
             socketService.off('lead:deleted');
             socketService.off('lead:bulk-created');
             socketService.off('callLog:created');
+            socketService.off('callLog:deleted');
         };
     }, []);
 

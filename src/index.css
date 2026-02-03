@@ -1675,3 +1675,6 @@ a:hover {
 .table tbody tr.clickable-row.greyed-out:hover {
   background: transparent;
 }
+.hover-text-danger:hover {
+  color: var(--error-500) !important;
+}

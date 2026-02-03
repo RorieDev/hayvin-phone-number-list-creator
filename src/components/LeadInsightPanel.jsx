@@ -23,7 +23,8 @@ import {
     Edit3,
     Save,
     Gauge,
-    Mail
+    Mail,
+    Trash2
 } from 'lucide-react';
 import { scoreLead, getScoreColor } from '../lib/leadScoring';
 import { createDemoEvent, createCallbackEvent } from '../lib/calendarService';
@@ -177,34 +178,68 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                         </h3>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                            {lead.call_logs.map((log, i) => (
-                                <div key={i} style={{
-                                    padding: 'var(--space-3)',
-                                    background: 'var(--bg-tertiary)',
-                                    borderRadius: 'var(--radius-md)',
-                                    borderLeft: '3px solid var(--primary-400)'
-                                }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
-                                        <span style={{ fontWeight: 600, color: 'var(--primary-400)' }}>
-                                            {formatOutcome(log.call_outcome)}
-                                        </span>
-                                        <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
-                                            {log.called_at ? (
-                                                <>
-                                                    {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </>
-                                            ) : (
-                                                'Date unavailable'
-                                            )}
-                                        </span>
+                            {[...lead.call_logs]
+                                .sort((a, b) => new Date(b.called_at || 0) - new Date(a.called_at || 0))
+                                .map((log, i) => (
+                                    <div key={log.id || i} style={{
+                                        padding: 'var(--space-3)',
+                                        background: 'var(--bg-tertiary)',
+                                        borderRadius: 'var(--radius-md)',
+                                        borderLeft: '3px solid var(--primary-400)',
+                                        position: 'relative',
+                                        group: 'true'
+                                    }} className="call-log-item">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 'var(--space-2)' }}>
+                                            <span style={{ fontWeight: 600, color: 'var(--primary-400)' }}>
+                                                {formatOutcome(log.call_outcome)}
+                                            </span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                                                <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-muted)' }}>
+                                                    {log.called_at ? (
+                                                        <>
+                                                            {new Date(log.called_at).toLocaleDateString()} {new Date(log.called_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </>
+                                                    ) : (
+                                                        'Date unavailable'
+                                                    )}
+                                                </span>
+                                                <button
+                                                    onClick={async (e) => {
+                                                        e.stopPropagation();
+                                                        if (confirm('Delete this call log?')) {
+                                                            try {
+                                                                await callLogsApi.delete(log.id);
+                                                            } catch (err) {
+                                                                console.error('Failed to delete call log:', err);
+                                                            }
+                                                        }
+                                                    }}
+                                                    style={{
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        color: 'var(--text-muted)',
+                                                        cursor: 'pointer',
+                                                        padding: '4px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        borderRadius: 'var(--radius-sm)',
+                                                        transition: 'color var(--transition-fast)'
+                                                    }}
+                                                    className="hover-text-danger"
+                                                    title="Delete call log"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {log.notes && (
+                                            <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', lineHeight: 1.5 }}>
+                                                {log.notes}
+                                            </p>
+                                        )}
                                     </div>
-                                    {log.notes && (
-                                        <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', lineHeight: 1.5 }}>
-                                            {log.notes}
-                                        </p>
-                                    )}
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     </section>
                 )}

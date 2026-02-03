@@ -226,4 +226,27 @@ router.get('/callbacks', async (req, res) => {
     }
 });
 
+// Delete a call log
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const io = req.app.get('io');
+
+        const { error } = await supabase
+            .from('call_logs')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Emit real-time update
+        emitCallLogUpdate(io, 'deleted', { id });
+
+        res.json({ message: 'Call log deleted successfully' });
+    } catch (error) {
+        console.error('Delete call log error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;

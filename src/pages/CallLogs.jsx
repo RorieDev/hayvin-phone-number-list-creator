@@ -66,8 +66,13 @@ export default function CallLogs() {
             fetchData(); // Refresh stats
         });
 
+        socketService.onCallLogDeleted(() => {
+            fetchData();
+        });
+
         return () => {
             socketService.off('callLog:created');
+            socketService.off('callLog:deleted');
         };
     }, []);
 

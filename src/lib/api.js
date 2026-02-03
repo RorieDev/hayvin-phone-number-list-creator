@@ -110,7 +110,11 @@ export const callLogsApi = {
     getCallbacks: (campaignId = null) => {
         const query = campaignId ? `?campaign_id=${campaignId}` : '';
         return request(`/call-logs/callbacks${query}`);
-    }
+    },
+
+    delete: (id) => request(`/call-logs/${id}`, {
+        method: 'DELETE'
+    })
 };
 
 // Health check

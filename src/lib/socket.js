@@ -124,6 +124,10 @@ class SocketService {
     onCallLogCreated(callback) {
         this.on('callLog:created', callback);
     }
+
+    onCallLogDeleted(callback) {
+        this.on('callLog:deleted', callback);
+    }
 }
 
 export const socketService = new SocketService();
