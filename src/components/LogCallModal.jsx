@@ -13,6 +13,8 @@ const CALL_OUTCOMES = [
     { value: 'no_answer', label: 'No Answer', color: 'var(--text-muted)' },
     { value: 'busy', label: 'Busy', color: 'var(--warning-500)' },
     { value: 'callback_scheduled', label: 'Demo booked', color: '#a855f7' },
+    { value: 'wants_callback', label: 'Wants Callback', color: 'var(--warning-500)' },
+    { value: 'sent_number', label: 'Sent Number', color: 'var(--primary-400)' },
     { value: 'need_closing', label: 'Needs Closing', color: 'var(--success-500)' },
     { value: 'closed_won', label: 'Closed Won', color: 'var(--success-600)' },
     { value: 'closed_lost', label: 'Closed Lost', color: 'var(--error-500)' },
@@ -136,11 +138,11 @@ export default function LogCallModal({ lead, onClose }) {
                         </div>
 
                         {/* Callback Scheduling */}
-                        {outcome === 'callback_scheduled' && (
+                        {(outcome === 'callback_scheduled' || outcome === 'wants_callback') && (
                             <div className="form-group">
                                 <label className="form-label">
                                     <Clock size={14} style={{ display: 'inline', marginRight: 'var(--space-1)' }} />
-                                    Schedule Demo
+                                    Schedule Callback
                                 </label>
                                 <input
                                     type="datetime-local"

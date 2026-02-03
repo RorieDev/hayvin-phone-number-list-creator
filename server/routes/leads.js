@@ -143,7 +143,7 @@ router.get('/stats/overview', async (req, res) => {
         const open = (total || 0) - (closed || 0);
 
         // 5. Get counts for all specific statuses
-        const statuses = ['new', 'callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested'];
+        const statuses = ['new', 'callback', 'sent_number', 'wants_callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested'];
         const counts = {};
         for (const status of statuses) {
             let sQuery = supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', status);

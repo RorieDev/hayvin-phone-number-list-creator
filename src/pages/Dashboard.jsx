@@ -175,9 +175,10 @@ export default function Dashboard() {
                                             alignItems: 'center',
                                             justifyContent: 'center'
                                         }}>
-                                            {call.call_outcome === 'callback_scheduled' ? <Clock size={16} style={{ color: 'var(--warning-500)' }} /> :
-                                                call.call_outcome === 'not_interested' ? <XCircle size={16} style={{ color: 'var(--error-500)' }} /> :
-                                                    <Phone size={16} style={{ color: 'var(--text-muted)' }} />}
+                                            {call.call_outcome === 'callback_scheduled' || call.call_outcome === 'wants_callback' ? <Clock size={16} style={{ color: 'var(--warning-500)' }} /> :
+                                                call.call_outcome === 'sent_number' ? <Phone size={16} style={{ color: 'var(--primary-400)' }} /> :
+                                                    call.call_outcome === 'not_interested' ? <XCircle size={16} style={{ color: 'var(--error-500)' }} /> :
+                                                        <Phone size={16} style={{ color: 'var(--text-muted)' }} />}
                                         </div>
                                         <div>
                                             <div className="font-medium text-sm">{call.leads?.business_name || 'Unknown'}</div>
@@ -205,6 +206,8 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-4">
                         {[
                             { status: 'new', label: 'Open', color: 'var(--info-500)', icon: AlertCircle },
+                            { status: 'wants_callback', label: 'Wants Callback', color: 'var(--warning-500)', icon: Clock },
+                            { status: 'sent_number', label: 'Sent Number', color: 'var(--primary-400)', icon: Phone },
                             { status: 'not_interested', label: 'Not Interested', color: 'var(--error-500)', icon: XCircle },
                             { status: 'callback', label: 'Demo booked', color: '#a855f7', icon: Clock },
                             { status: 'need_closing', label: 'Needs Closing', color: 'var(--success-500)', icon: Target },
