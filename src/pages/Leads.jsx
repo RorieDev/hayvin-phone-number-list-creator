@@ -198,11 +198,11 @@ export default function Leads() {
                     </div>
                     <button
                         className="btn btn-ghost btn-sm hidden-mobile"
-                        onClick={resetWidths}
-                        title="Reset column widths"
+                        onClick={fetchLeads}
+                        title="Refresh leads"
                     >
                         <RotateCcw size={14} />
-                        Reset Columns
+                        Refresh
                     </button>
                 </div>
 
