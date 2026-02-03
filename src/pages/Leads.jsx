@@ -47,7 +47,7 @@ export default function Leads() {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState('');
+    const [statusFilter, setStatusFilter] = useState('new');
     const [total, setTotal] = useState(0);
     const [selectedLead, setSelectedLead] = useState(null);
     const [showCallModal, setShowCallModal] = useState(false);
