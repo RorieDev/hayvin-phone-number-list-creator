@@ -1678,3 +1678,7 @@ a:hover {
 .hover-text-danger:hover {
   color: var(--error-500) !important;
 }
+
+.hover-text-primary:hover {
+  color: var(--primary-400) !important;
+}

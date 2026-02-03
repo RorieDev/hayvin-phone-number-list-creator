@@ -8,7 +8,9 @@ import {
     Phone,
     Zap,
     Menu,
-    X
+    X,
+    Edit2,
+    Save
 } from 'lucide-react';
 import { socketService } from '../lib/socket';
 import { callLogsApi } from '../lib/api';
@@ -68,19 +70,28 @@ export default function Layout({ children }) {
     // Close menu when clicking outside (on overlay)
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+    const [openingScript, setOpeningScript] = useState(
+        localStorage.getItem('opening_script') ||
+        "Hi, it's Rorie here, am I speaking to the owner of [Business Name]? Great, have you ever thought of using voice AI to answer your calls and sell your services?"
+    );
+    const [isEditingScript, setIsEditingScript] = useState(false);
+    const [tempScript, setTempScript] = useState(openingScript);
+
+    const handleSaveScript = () => {
+        setOpeningScript(tempScript);
+        localStorage.setItem('opening_script', tempScript);
+        setIsEditingScript(false);
+    };
+
     return (
-        <div className="app-layout">
+        <div className={`layout ${isMenuOpen ? 'menu-open' : ''}`}>
             {/* Mobile Header */}
             <header className="mobile-header">
-                <div className="mobile-logo">
-                    <Zap size={24} style={{ color: 'var(--primary-400)' }} />
+                <div className="sidebar-logo" style={{ marginBottom: 0 }}>
+                    <Zap size={24} fill="var(--primary-400)" stroke="var(--primary-400)" />
                     <span>Hayvin</span>
                 </div>
-                <button
-                    className="menu-toggle"
-                    onClick={toggleMenu}
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                >
+                <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </header>
@@ -90,10 +101,18 @@ export default function Layout({ children }) {
                 <div className="sidebar-overlay" onClick={() => setIsMenuOpen(false)} />
             )}
 
+            {/* Sidebar */}
             <aside className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
                 <div className="sidebar-logo">
-                    <Zap size={28} strokeWidth={2.5} className="text-primary" style={{ color: 'var(--primary-400)' }} />
+                    <Zap size={28} fill="var(--primary-400)" stroke="var(--primary-400)" />
                     <span>Hayvin CRM</span>
+                </div>
+
+                <div className="sidebar-stats">
+                    <div className="sidebar-stat-item">
+                        <div className="sidebar-stat-value">{dialsInSet}</div>
+                        <div className="sidebar-stat-label">Dials in set</div>
+                    </div>
                 </div>
 
                 <nav className="sidebar-nav">
@@ -116,26 +135,83 @@ export default function Layout({ children }) {
                     padding: 'var(--space-3)',
                     background: 'rgba(20, 184, 166, 0.08)',
                     borderRadius: 'var(--radius-md)',
-                    borderLeft: '3px solid var(--primary-400)'
+                    borderLeft: '3px solid var(--primary-400)',
+                    position: 'relative'
                 }}>
                     <div style={{
-                        fontSize: 'var(--font-size-xs)',
-                        fontWeight: 600,
-                        color: 'var(--primary-400)',
-                        marginBottom: 'var(--space-2)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em'
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: 'var(--space-2)'
                     }}>
-                        📞 Opening Line
+                        <div style={{
+                            fontSize: 'var(--font-size-xs)',
+                            fontWeight: 600,
+                            color: 'var(--primary-400)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
+                        }}>
+                            📞 Opening Line
+                        </div>
+                        <button
+                            onClick={() => {
+                                if (isEditingScript) {
+                                    handleSaveScript();
+                                } else {
+                                    setTempScript(openingScript);
+                                    setIsEditingScript(true);
+                                }
+                            }}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--text-muted)',
+                                cursor: 'pointer',
+                                padding: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                transition: 'color var(--transition-fast)'
+                            }}
+                            className="hover-text-primary"
+                        >
+                            {isEditingScript ? <Save size={14} /> : <Edit2 size={14} />}
+                        </button>
                     </div>
-                    <p style={{
-                        fontSize: 'var(--font-size-sm)',
-                        color: 'var(--text-secondary)',
-                        lineHeight: 1.5,
-                        margin: 0
-                    }}>
-                        "Hi, it's Rorie here, am I speaking to the owner of <strong style={{ color: 'var(--primary-400)' }}>[Business Name]</strong>? Great, have you ever thought of using voice AI to answer your calls and sell your services?"
-                    </p>
+
+                    {isEditingScript ? (
+                        <textarea
+                            value={tempScript}
+                            onChange={(e) => setTempScript(e.target.value)}
+                            style={{
+                                width: '100%',
+                                background: 'var(--bg-tertiary)',
+                                border: '1px solid var(--primary-400)',
+                                borderRadius: 'var(--radius-sm)',
+                                color: 'var(--text-primary)',
+                                fontSize: 'var(--font-size-sm)',
+                                fontFamily: 'inherit',
+                                padding: 'var(--space-2)',
+                                minHeight: '100px',
+                                outline: 'none',
+                                resize: 'none'
+                            }}
+                            autoFocus
+                        />
+                    ) : (
+                        <p style={{
+                            fontSize: 'var(--font-size-sm)',
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.5,
+                            margin: 0,
+                            whiteSpace: 'pre-wrap'
+                        }}>
+                            {openingScript.split(/(\[Business Name\])/g).map((part, i) =>
+                                part === '[Business Name]' ? (
+                                    <strong key={i} style={{ color: 'var(--primary-400)' }}>{part}</strong>
+                                ) : part
+                            )}
+                        </p>
+                    )}
                 </div>
 
                 <div className="sidebar-footer" style={{
