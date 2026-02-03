@@ -108,12 +108,7 @@ export default function Layout({ children }) {
                     <span>Hayvin CRM</span>
                 </div>
 
-                <div className="sidebar-stats">
-                    <div className="sidebar-stat-item">
-                        <div className="sidebar-stat-value">{dialsInSet}</div>
-                        <div className="sidebar-stat-label">Dials in set</div>
-                    </div>
-                </div>
+
 
                 <nav className="sidebar-nav">
                     {navItems.map(({ path, label, icon: Icon }) => (
