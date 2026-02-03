@@ -110,6 +110,34 @@ export default function Layout({ children }) {
                     ))}
                 </nav>
 
+                {/* Opening Line Script */}
+                <div className="sidebar-script" style={{
+                    margin: 'var(--space-4)',
+                    padding: 'var(--space-3)',
+                    background: 'rgba(20, 184, 166, 0.08)',
+                    borderRadius: 'var(--radius-md)',
+                    borderLeft: '3px solid var(--primary-400)'
+                }}>
+                    <div style={{
+                        fontSize: 'var(--font-size-xs)',
+                        fontWeight: 600,
+                        color: 'var(--primary-400)',
+                        marginBottom: 'var(--space-2)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        📞 Opening Line
+                    </div>
+                    <p style={{
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.5,
+                        margin: 0
+                    }}>
+                        "Hi, it's Rorie here, am I speaking to the owner of <strong style={{ color: 'var(--primary-400)' }}>[Business Name]</strong>? Great, have you ever thought of using voice AI to answer your calls and sell your services?"
+                    </p>
+                </div>
+
                 <div className="sidebar-footer" style={{
                     marginTop: 'auto',
                     paddingTop: 'var(--space-6)',

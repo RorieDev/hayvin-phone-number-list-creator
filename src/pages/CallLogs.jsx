@@ -13,6 +13,7 @@ import { callLogsApi, campaignsApi } from '../lib/api';
 import { socketService } from '../lib/socket';
 
 const OUTCOME_CONFIG = {
+    not_yet: { icon: Clock, color: 'var(--text-muted)', label: 'Not Yet' },
     answered: { icon: Phone, color: 'var(--success-500)', label: 'Answered' },
     voicemail: { icon: Voicemail, color: 'var(--warning-500)', label: 'Voicemail' },
     no_answer: { icon: PhoneMissed, color: 'var(--text-muted)', label: 'No Answer' },

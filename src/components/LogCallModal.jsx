@@ -7,6 +7,7 @@ import {
 import { callLogsApi } from '../lib/api';
 
 const CALL_OUTCOMES = [
+    { value: 'not_yet', label: 'Not Yet', color: 'var(--text-muted)' },
     { value: 'answered', label: 'Answered', color: 'var(--success-500)' },
     { value: 'voicemail', label: 'Left Voicemail', color: 'var(--warning-500)' },
     { value: 'no_answer', label: 'No Answer', color: 'var(--text-muted)' },

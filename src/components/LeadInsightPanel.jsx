@@ -633,6 +633,7 @@ function formatCategory(category) {
  */
 function formatOutcome(outcome) {
     const outcomeMap = {
+        'not_yet': '⏸️ Not Yet',
         'answered': '✅ Answered',
         'voicemail': '📞 Left Voicemail',
         'no_answer': '❌ No Answer',

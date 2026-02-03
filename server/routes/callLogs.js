@@ -82,6 +82,9 @@ router.post('/', async (req, res) => {
         // Update lead status based on call outcome
         let newStatus;
         switch (call_outcome) {
+            case 'not_yet':
+                newStatus = 'new'; // Keep as new since they haven't been reached
+                break;
             case 'answered':
             case 'voicemail':
             case 'no_answer':
@@ -144,51 +147,51 @@ router.post('/', async (req, res) => {
 // Get call stats for the current set (keeps same behavior but route no longer mentions "today")
 router.get('/stats/set', async (req, res) => {
     try {
-            const { campaign_id } = req.query;
+        const { campaign_id } = req.query;
 
-            // For the 'set' stats we count unique leads contacted in the current set
-            // (i.e. across all time, filtered by campaign if provided). This matches
-            // the UI expectation of "dials in this set of leads" rather than a
-            // strict "today" filter.
+        // For the 'set' stats we count unique leads contacted in the current set
+        // (i.e. across all time, filtered by campaign if provided). This matches
+        // the UI expectation of "dials in this set of leads" rather than a
+        // strict "today" filter.
 
-            // Fetch matching call logs (only lead ids) and compute unique leads
-            let rowsQuery = supabase
+        // Fetch matching call logs (only lead ids) and compute unique leads
+        let rowsQuery = supabase
+            .from('call_logs')
+            .select('lead_id');
+
+        if (campaign_id) {
+            rowsQuery = rowsQuery.eq('campaign_id', campaign_id);
+        }
+
+        const { data: rows, error: rowsError } = await rowsQuery;
+        if (rowsError) throw rowsError;
+
+        const uniqueLeads = new Set((rows || []).map(r => r.lead_id));
+        const totalUniqueLeads = uniqueLeads.size;
+
+        // Count by outcome (still reporting raw call counts per outcome)
+        const outcomes = {};
+        const outcomeTypes = ['not_yet', 'answered', 'voicemail', 'no_answer', 'busy', 'callback_scheduled', 'need_closing', 'closed_won', 'closed_lost', 'not_interested', 'wrong_number', 'do_not_call'];
+
+        for (const outcome of outcomeTypes) {
+            let outcomeQuery = supabase
                 .from('call_logs')
-                .select('lead_id');
+                .select('*', { count: 'exact', head: true })
+                .eq('call_outcome', outcome);
 
             if (campaign_id) {
-                rowsQuery = rowsQuery.eq('campaign_id', campaign_id);
+                outcomeQuery = outcomeQuery.eq('campaign_id', campaign_id);
             }
 
-            const { data: rows, error: rowsError } = await rowsQuery;
-            if (rowsError) throw rowsError;
+            const { count: outcomeCount } = await outcomeQuery;
+            outcomes[outcome] = outcomeCount || 0;
+        }
 
-            const uniqueLeads = new Set((rows || []).map(r => r.lead_id));
-            const totalUniqueLeads = uniqueLeads.size;
-
-            // Count by outcome (still reporting raw call counts per outcome)
-            const outcomes = {};
-            const outcomeTypes = ['answered', 'voicemail', 'no_answer', 'busy', 'callback_scheduled', 'need_closing', 'closed_won', 'closed_lost', 'not_interested', 'wrong_number', 'do_not_call'];
-
-            for (const outcome of outcomeTypes) {
-                let outcomeQuery = supabase
-                    .from('call_logs')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('call_outcome', outcome);
-
-                if (campaign_id) {
-                    outcomeQuery = outcomeQuery.eq('campaign_id', campaign_id);
-                }
-
-                const { count: outcomeCount } = await outcomeQuery;
-                outcomes[outcome] = outcomeCount || 0;
-            }
-
-            res.json({
-                total_calls: totalUniqueLeads || 0,
-                outcomes,
-                date: null
-            });
+        res.json({
+            total_calls: totalUniqueLeads || 0,
+            outcomes,
+            date: null
+        });
     } catch (error) {
         console.error('Get call stats error:', error);
         res.status(500).json({ error: error.message });

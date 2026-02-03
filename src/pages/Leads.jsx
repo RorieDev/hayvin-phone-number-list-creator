@@ -491,6 +491,7 @@ function getLatestCallOutcome(callLogs) {
  */
 function formatCallOutcome(outcome) {
     const outcomeMap = {
+        'not_yet': 'Not Yet',
         'answered': 'Answered',
         'voicemail': 'Voicemail',
         'no_answer': 'No Answer',
@@ -511,6 +512,7 @@ function formatCallOutcome(outcome) {
  */
 function getOutcomeIcon(outcome) {
     const iconMap = {
+        'not_yet': '⏸️',
         'answered': '✅',
         'voicemail': '📟',
         'no_answer': '📵',
