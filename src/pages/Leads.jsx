@@ -251,6 +251,8 @@ export default function Leads() {
                             <span className="text-xs opacity-20">|</span>
                             <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.sent_number || 0} Sent Number</span>
                             <span className="text-xs opacity-20">|</span>
+                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.need_closing || 0} Needs Closing</span>
+                            <span className="text-xs opacity-20">|</span>
                             <span>{stats.dialled} Dialled</span>
                         </p>
                     </div>
@@ -266,7 +268,12 @@ export default function Leads() {
                                 className="form-input search-input"
                                 placeholder="Search by name or phone..."
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    if (e.target.value && statusFilter !== '') {
+                                        setStatusFilter('');
+                                    }
+                                }}
                             />
                         </div>
 
