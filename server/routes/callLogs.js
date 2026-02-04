@@ -98,6 +98,9 @@ router.post('/', async (req, res) => {
             case 'wants_callback':
                 newStatus = 'wants_callback';
                 break;
+            case 'receptionist':
+                newStatus = 'receptionist';
+                break;
             case 'need_closing':
                 newStatus = 'need_closing';
                 break;
@@ -175,7 +178,7 @@ router.get('/stats/set', async (req, res) => {
 
         // Count by outcome (still reporting raw call counts per outcome)
         const outcomes = {};
-        const outcomeTypes = ['not_yet', 'answered', 'voicemail', 'no_answer', 'busy', 'callback_scheduled', 'sent_number', 'wants_callback', 'need_closing', 'closed_won', 'closed_lost', 'not_interested', 'wrong_number', 'do_not_call'];
+        const outcomeTypes = ['not_yet', 'answered', 'voicemail', 'no_answer', 'busy', 'callback_scheduled', 'sent_number', 'wants_callback', 'receptionist', 'need_closing', 'closed_won', 'closed_lost', 'not_interested', 'wrong_number', 'do_not_call'];
 
         for (const outcome of outcomeTypes) {
             let outcomeQuery = supabase

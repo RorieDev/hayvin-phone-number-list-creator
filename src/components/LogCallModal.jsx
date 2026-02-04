@@ -15,6 +15,7 @@ const CALL_OUTCOMES = [
     { value: 'callback_scheduled', label: 'Demo booked', color: '#a855f7' },
     { value: 'wants_callback', label: 'Wants Callback', color: 'white', bg: 'var(--success-500)' },
     { value: 'sent_number', label: 'Sent Number', color: 'var(--primary-400)' },
+    { value: 'receptionist', label: 'Have Receptionist', color: 'var(--info-500)' },
     { value: 'need_closing', label: 'Needs Closing', color: 'var(--success-500)' },
     { value: 'closed_won', label: 'Closed Won', color: 'var(--success-600)' },
     { value: 'closed_lost', label: 'Closed Lost', color: 'var(--error-500)' },
