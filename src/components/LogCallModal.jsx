@@ -10,15 +10,15 @@ const CALL_OUTCOMES = [
     { value: 'not_yet', label: 'Not Yet', color: 'var(--text-muted)' },
     { value: 'answered', label: 'Answered', color: 'var(--success-500)' },
     { value: 'voicemail', label: 'Left Voicemail', color: 'var(--warning-500)' },
-    { value: 'no_answer', label: 'No Answer', color: 'var(--text-muted)', selectedBg: 'var(--warning-500)', selectedColor: 'white' },
+    { value: 'no_answer', label: 'No Answer', color: 'white', bg: 'var(--warning-500)' },
     { value: 'busy', label: 'Busy', color: 'var(--warning-500)' },
     { value: 'callback_scheduled', label: 'Demo booked', color: '#a855f7' },
-    { value: 'wants_callback', label: 'Wants Callback', color: 'var(--warning-500)', selectedBg: 'var(--success-500)', selectedColor: 'white' },
+    { value: 'wants_callback', label: 'Wants Callback', color: 'white', bg: 'var(--success-500)' },
     { value: 'sent_number', label: 'Sent Number', color: 'var(--primary-400)' },
     { value: 'need_closing', label: 'Needs Closing', color: 'var(--success-500)' },
     { value: 'closed_won', label: 'Closed Won', color: 'var(--success-600)' },
     { value: 'closed_lost', label: 'Closed Lost', color: 'var(--error-500)' },
-    { value: 'not_interested', label: 'Not Interested', color: 'var(--error-500)', selectedBg: 'var(--error-500)', selectedColor: 'white' },
+    { value: 'not_interested', label: 'Not Interested', color: 'white', bg: 'var(--error-500)' },
     { value: 'wrong_number', label: 'Wrong Number', color: 'var(--error-500)' },
     { value: 'do_not_call', label: 'Do Not Call', color: 'var(--error-500)' },
 ];
@@ -118,17 +118,19 @@ export default function LogCallModal({ lead, onClose }) {
                                         onClick={() => setOutcome(opt.value)}
                                         style={{
                                             padding: 'var(--space-2) var(--space-3)',
-                                            background: outcome === opt.value ? (opt.selectedBg || 'rgba(20, 184, 166, 0.1)') : 'var(--bg-tertiary)',
-                                            border: `1px solid ${outcome === opt.value ? (opt.selectedBg || 'var(--primary-500)') : 'var(--border-color)'}`,
+                                            background: opt.bg ? opt.bg : (outcome === opt.value ? 'rgba(20, 184, 166, 0.1)' : 'var(--bg-tertiary)'),
+                                            border: `1px solid ${outcome === opt.value ? (opt.bg ? 'white' : 'var(--primary-500)') : (opt.bg ? opt.bg : 'var(--border-color)')}`,
                                             borderRadius: 'var(--radius-md)',
                                             cursor: 'pointer',
                                             textAlign: 'left',
-                                            color: outcome === opt.value ? (opt.selectedColor || opt.color) : 'var(--text-secondary)',
+                                            color: opt.bg ? 'white' : (outcome === opt.value ? opt.color : 'var(--text-secondary)'),
                                             fontSize: '11px',
                                             transition: 'all var(--transition-fast)',
                                             whiteSpace: 'nowrap',
                                             overflow: 'hidden',
-                                            textOverflow: 'ellipsis'
+                                            textOverflow: 'ellipsis',
+                                            fontWeight: opt.bg || outcome === opt.value ? 600 : 400,
+                                            boxShadow: outcome === opt.value ? '0 0 10px rgba(255, 255, 255, 0.2)' : 'none'
                                         }}
                                     >
                                         {opt.label}
