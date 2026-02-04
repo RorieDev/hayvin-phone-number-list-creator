@@ -24,6 +24,8 @@ import { getMailtoLink } from '../lib/emailTemplates';
 const STATUS_OPTIONS = [
     { value: '', label: 'All Statuses' },
     { value: 'open_pipeline', label: 'Open' },
+    { value: 'closed_pipeline', label: 'Closed' },
+    { value: 'dialled', label: 'Dialled' },
     { value: 'new', label: 'Fresh (Uncalled)' },
     { value: 'callback', label: 'Demo booked' },
     { value: 'wants_callback', label: 'Wants Callback' },
@@ -241,19 +243,57 @@ export default function Leads() {
                             Leads
                         </h1>
                         <p className="text-muted flex items-center justify-center gap-2 flex-wrap hidden-mobile">
-                            <span>{stats.total} Leads</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === '' ? 'active' : ''}`}
+                                onClick={() => setStatusFilter('')}
+                            >
+                                {stats.total} Leads
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span>{stats.closed} Closed</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'closed_pipeline' ? 'active' : ''}`}
+                                onClick={() => setStatusFilter('closed_pipeline')}
+                            >
+                                {stats.closed} Closed
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span>{stats.open} Open</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'open_pipeline' ? 'active' : ''}`}
+                                onClick={() => setStatusFilter('open_pipeline')}
+                            >
+                                {stats.open} Open
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.wants_callback || 0} Wants Callback</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'wants_callback' ? 'active' : ''}`}
+                                style={{ color: 'var(--success-500)', fontWeight: statusFilter === 'wants_callback' ? '700' : '600' }}
+                                onClick={() => setStatusFilter('wants_callback')}
+                            >
+                                {stats.wants_callback || 0} Wants Callback
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.sent_number || 0} Sent Number</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'sent_number' ? 'active' : ''}`}
+                                style={{ color: 'var(--success-500)', fontWeight: statusFilter === 'sent_number' ? '700' : '600' }}
+                                onClick={() => setStatusFilter('sent_number')}
+                            >
+                                {stats.sent_number || 0} Sent Number
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span style={{ color: 'var(--success-500)', fontWeight: '600' }}>{stats.need_closing || 0} Needs Closing</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'need_closing' ? 'active' : ''}`}
+                                style={{ color: 'var(--success-500)', fontWeight: statusFilter === 'need_closing' ? '700' : '600' }}
+                                onClick={() => setStatusFilter('need_closing')}
+                            >
+                                {stats.need_closing || 0} Needs Closing
+                            </span>
                             <span className="text-xs opacity-20">|</span>
-                            <span>{stats.dialled} Dialled</span>
+                            <span
+                                className={`clickable-stat ${statusFilter === 'dialled' ? 'active' : ''}`}
+                                onClick={() => setStatusFilter('dialled')}
+                            >
+                                {stats.dialled} Dialled
+                            </span>
                         </p>
                     </div>
                 </div>

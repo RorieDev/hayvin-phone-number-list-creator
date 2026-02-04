@@ -20,6 +20,12 @@ router.get('/', async (req, res) => {
             if (status === 'open_pipeline') {
                 // 'Open' in UI - all active leads NOT (Not Interested, Needs Closing, Closed Won, Closed Lost)
                 query = query.not('status', 'in', '("not_interested","need_closing","closed_won","closed_lost","wrong_number","do_not_call")');
+            } else if (status === 'closed_pipeline') {
+                // 'Closed' in UI - all leads in final states
+                query = query.in('status', ['not_interested', 'need_closing', 'closed_won', 'closed_lost', 'wrong_number', 'do_not_call']);
+            } else if (status === 'dialled') {
+                // 'Dialled' leads - those with last_called_at not null
+                query = query.not('last_called_at', 'is', null);
             } else if (status === 'new') {
                 // 'Fresh' in UI - leads with status 'new', never called, and no call logs
                 query = query.eq('status', 'new').is('last_called_at', null);
