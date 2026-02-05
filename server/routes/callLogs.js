@@ -80,15 +80,8 @@ router.post('/', async (req, res) => {
         if (error) throw error;
 
         // Update lead status based on call outcome
-        let newStatus;
+        let newStatus = null;
         switch (call_outcome) {
-            case 'not_yet':
-            case 'answered':
-            case 'voicemail':
-            case 'no_answer':
-            case 'busy':
-                newStatus = 'new';
-                break;
             case 'callback_scheduled':
                 newStatus = 'callback';
                 break;
@@ -115,8 +108,8 @@ router.post('/', async (req, res) => {
             case 'do_not_call':
                 newStatus = 'not_interested';
                 break;
-            default:
-                newStatus = 'new';
+            // outcomes like 'not_yet', 'answered', 'voicemail', 'no_answer', 'busy'
+            // don't change the stage of the lead.
         }
 
         // Always update last_called_at, regardless of outcome

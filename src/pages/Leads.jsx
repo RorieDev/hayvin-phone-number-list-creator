@@ -574,14 +574,18 @@ export default function Leads() {
 function getLatestCallOutcome(callLogs) {
     if (!callLogs || callLogs.length === 0) return null;
 
-    // Sort by called_at date (most recent first) and return the outcome
+    // Sort by called_at date (most recent first)
     const sorted = [...callLogs].sort((a, b) => {
         const dateA = new Date(a.called_at).getTime();
         const dateB = new Date(b.called_at).getTime();
         return dateB - dateA;
     });
 
-    return sorted[0]?.call_outcome;
+    // Find the latest outcome that is not 'not_yet'
+    const significantLog = sorted.find(log => log.call_outcome !== 'not_yet');
+
+    // If we found a significant outcome, use it. Otherwise use the absolute latest (which would be 'not_yet')
+    return significantLog ? significantLog.call_outcome : sorted[0].call_outcome;
 }
 
 /**
