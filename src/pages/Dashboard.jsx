@@ -85,6 +85,7 @@ export default function Dashboard() {
         <div>
             <div className="page-header">
                 <h1 className="page-title">Dashboard</h1>
+                <span className="text-sm text-muted">Updated: Friday 09:01 AM</span>
             </div>
 
             {/* Stats Grid */}
