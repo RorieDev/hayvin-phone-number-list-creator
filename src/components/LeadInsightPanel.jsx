@@ -169,6 +169,24 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
 
             {/* Scrollable Content */}
             <div className="lead-insight-content">
+                {/* Notes */}
+                <section className="lead-insight-section">
+                    <h3 className="lead-insight-section-title">
+                        <Edit3 size={16} />
+                        Notes
+                        {notesSaving && <span className="lead-insight-saving">Saving...</span>}
+                        {notesSaved && <span className="lead-insight-saved"><Save size={12} /> Saved</span>}
+                    </h3>
+
+                    <textarea
+                        className="lead-insight-notes"
+                        placeholder="Add notes about this lead..."
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        onBlur={handleNotesBlur}
+                        rows={4}
+                    />
+                </section>
 
                 {/* Call History */}
                 {lead.call_logs && lead.call_logs.length > 0 && (
@@ -342,24 +360,6 @@ export default function LeadInsightPanel({ lead, onClose, onUpdate, onLogCall })
                     </div>
                 </section>
 
-                {/* Notes */}
-                <section className="lead-insight-section">
-                    <h3 className="lead-insight-section-title">
-                        <Edit3 size={16} />
-                        Notes
-                        {notesSaving && <span className="lead-insight-saving">Saving...</span>}
-                        {notesSaved && <span className="lead-insight-saved"><Save size={12} /> Saved</span>}
-                    </h3>
-
-                    <textarea
-                        className="lead-insight-notes"
-                        placeholder="Add notes about this lead..."
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        onBlur={handleNotesBlur}
-                        rows={4}
-                    />
-                </section>
             </div>
 
             {/* Sticky Footer Actions */}
