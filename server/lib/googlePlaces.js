@@ -2,7 +2,6 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
-dotenv.config({ path: '.env.local', override: true });
 
 const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
