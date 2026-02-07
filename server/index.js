@@ -54,18 +54,7 @@ app.use('/api/call-logs', callLogsRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    env: {
-      supabase_url: process.env.SUPABASE_URL ? 'configured' : 'missing',
-      url_debug: process.env.SUPABASE_URL ? `${process.env.SUPABASE_URL.substring(0, 15)}...${process.env.SUPABASE_URL.substring(process.env.SUPABASE_URL.length - 5)}` : 'N/A',
-      key_debug: process.env.SUPABASE_ANON_KEY ? `${process.env.SUPABASE_ANON_KEY.substring(0, 5)}...${process.env.SUPABASE_ANON_KEY.substring(process.env.SUPABASE_ANON_KEY.length - 5)}` : 'N/A',
-      url_len: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.length : 0,
-      key_len: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.length : 0,
-      node_env: process.env.NODE_ENV
-    }
-  });
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Serve static files in production
