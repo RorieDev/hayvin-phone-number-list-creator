@@ -59,7 +59,8 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     env: {
       supabase_url: process.env.SUPABASE_URL ? 'configured' : 'missing',
-      supabase_key_prefix: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.substring(0, 5) : 'missing',
+      supabase_url_prefix: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.substring(0, 15) : 'missing',
+      supabase_key_prefix: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.substring(0, 8) : 'missing',
       node_env: process.env.NODE_ENV
     }
   });
