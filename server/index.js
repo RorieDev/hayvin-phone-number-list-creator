@@ -59,10 +59,10 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     env: {
       supabase_url: process.env.SUPABASE_URL ? 'configured' : 'missing',
-      supabase_url_prefix: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.substring(0, 25) : 'missing',
-      supabase_url_len: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.length : 0,
-      supabase_key_prefix: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.substring(0, 10) : 'missing',
-      supabase_key_len: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.length : 0,
+      url_debug: process.env.SUPABASE_URL ? `${process.env.SUPABASE_URL.substring(0, 15)}...${process.env.SUPABASE_URL.substring(process.env.SUPABASE_URL.length - 5)}` : 'N/A',
+      key_debug: process.env.SUPABASE_ANON_KEY ? `${process.env.SUPABASE_ANON_KEY.substring(0, 5)}...${process.env.SUPABASE_ANON_KEY.substring(process.env.SUPABASE_ANON_KEY.length - 5)}` : 'N/A',
+      url_len: process.env.SUPABASE_URL ? process.env.SUPABASE_URL.length : 0,
+      key_len: process.env.SUPABASE_ANON_KEY ? process.env.SUPABASE_ANON_KEY.length : 0,
       node_env: process.env.NODE_ENV
     }
   });

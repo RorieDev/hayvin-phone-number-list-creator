@@ -10,7 +10,7 @@ let supabase = null;
 
 if (supabaseUrl && supabaseKey) {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized');
+    console.log(`✅ Supabase client initialized. URL length: ${supabaseUrl.length}, Key length: ${supabaseKey.length}`);
 } else {
     console.warn('⚠️  Missing Supabase credentials. Database features will not work.');
     console.warn('   Please set SUPABASE_URL and SUPABASE_ANON_KEY in .env');
